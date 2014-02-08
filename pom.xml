@@ -40,6 +40,14 @@
 			<version>1.0.1-BUILD-SNAPSHOT</version>
 		</dependency> 
 		
+		<!-- Jackson JSON -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+            
+		
 			<!-- Joda JSP tags -->
 		<dependency>
 			<groupId>joda-time</groupId>

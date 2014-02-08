@@ -4,6 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<title>Create Employee</title>
@@ -25,8 +26,8 @@
 
 
 
-<c:url var="saveUrl" value="/employee//addemployee" /> 
-<form:form id="addEmployee" modelAttribute="addEmployee" method="POST" action="${saveUrl}">
+<c:url var="saveUrl" value="/addemployee" /> 
+<form:form id="addEmployee" modelAttribute="addEmployee"  method="POST" action="${saveUrl}">
 	<table>
 	
 		<tr>
@@ -37,10 +38,10 @@
 			<td><form:label path="employeeSurname">Employee Surname</form:label></td>
 			<td><form:input path="employeeSurname"  id="employeeSurname" name="employeeSurname"/></td>
 		</tr>
-		
+	
 		<tr>
 			<td><form:label path="employeeDob">Employee DOB</form:label></td>
-			<td><form:input path="employeeDob" id="date" value="<%= df.format(new java.util.Date()) %>" name="employeeDob"/></td>
+			<td><form:input path="employeeDob" id="employeeDob" value="<%= df.format(new java.util.Date()) %>" name="employeeDob"/></td>
 		</tr> 
 		
 		<tr>
@@ -53,6 +54,7 @@
             </form:select>
         </td>
 		</tr>
+	
 		<tr>
 			<td><form:label path="employeePhone">Employee Phone</form:label></td>
 			<td><form:input path="employeePhone"  id="employeePhone" name="employeePhone"/></td>
@@ -60,9 +62,34 @@
 		
 		<tr>
 			<td><form:label path="employeeStartDate">Employee Start Date</form:label></td>
-			<td><form:input path="employeeStartDate" id="date" value="<%= df.format(new java.util.Date()) %>" name="employeeStartDate"/></td>
+			<td><form:input path="employeeStartDate" id="employeeStartDate" value="<%= df.format(new java.util.Date()) %>" name="employeeStartDate"/></td>
 		</tr>
-					
+		
+		
+		
+		
+		
+			<tr>
+			<td>Address 1</td>
+			<td><input id="employeeaddress12" name="employeeaddress1"/></td>
+		</tr>
+			<tr>
+			<td>Address 2</td>
+			<td><input id="employeeaddress22" name="employeeaddress2"/></td>
+		</tr>
+		
+		<tr>
+		 <td>Select Current Parcel Location</td>
+        <td>
+            <form:select path="" id="locality" name="locality">
+            <form:option value="" label="Select" />
+            <form:options  items="${elocality}" itemValue="Id" itemLabel="localityName" />
+            </form:select>
+        </td>
+		</tr> 
+	
+	
+	
 		
 	</table>
 	
@@ -71,7 +98,12 @@
 
   <script>
   $(document).ready(function() {
-    $("#date").datepicker({ dateFormat: 'dd/mm/yy' });
+    $("#employeeDob").datepicker({ dateFormat: 'dd/mm/yy' });
+  });
+ </script>
+   <script>
+  $(document).ready(function() {
+    $("#employeeStartDate").datepicker({ dateFormat: 'dd/mm/yy' });
   });
  </script>
 

@@ -17,11 +17,14 @@ import com.chris.LocationAwareTimesheet.model.enums.db.EmployeeEmployeeGenderEnu
 import com.chris.LocationAwareTimesheet.service.data.DataLayerLatsdbImpl;
 
 
+
 @Component
 public class EmployeeService {
 
 	@Autowired
 	DataLayerLatsdbImpl dlp;
+	
+	
 
 		
 	@Transactional
@@ -52,28 +55,17 @@ public class EmployeeService {
 	
 	
 	
-	/**
-	 * Retrieves a single employee
-	 */
-	@Transactional
-	public String gettest( Integer id ) {
-		
-		// Retrieve existing authority first
-		Employee employee = dlp.getEmployee(id);
-		String name = employee.getEmployeeName();
-		
-		return name;
-	}
 	
 	/**
 	 * Adds a new employee
 	 */
 	@Transactional
-	public void add(String ename, String esurname, String edob, String ephone, String egender, String estart, String eaddress1, String eaddress2, int localityid) {
+	public void add(String ename, String esurname, String edob, String ephone, String egender, String estart, String eaddress1, String eaddress2, Integer localityid) {
 	 
 	Employee employee = new Employee();
 	EmpAddress empAddress = new EmpAddress();
-	LocalityService localityService = new LocalityService();
+	Locality locality = dlp.getLocality(localityid);
+	
 	
 	
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -95,11 +87,14 @@ public class EmployeeService {
     			
 		// Save
 		dlp.saveOrUpdate(employee);
-	
+		
+		
 		empAddress.setEmployee(employee);
 		empAddress.setEmpAddress1(eaddress1);
 		empAddress.setEmpAddress2(eaddress2);
-		empAddress.setLocality(localityService.getId(localityid));
+		empAddress.setLocality(locality);
+		
+		dlp.saveOrUpdate(empAddress);
 		
 	}
 	
