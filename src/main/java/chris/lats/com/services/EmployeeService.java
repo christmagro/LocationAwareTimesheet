@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.chris.LocationAwareTimesheet.model.Departments;
 import com.chris.LocationAwareTimesheet.model.EmpAddress;
 import com.chris.LocationAwareTimesheet.model.Employee;
+import com.chris.LocationAwareTimesheet.model.EmployeeDepartment;
 import com.chris.LocationAwareTimesheet.model.Locality;
 import com.chris.LocationAwareTimesheet.model.enums.db.EmployeeEmployeeGenderEnum;
 import com.chris.LocationAwareTimesheet.service.data.DataLayerLatsdbImpl;
@@ -60,11 +62,13 @@ public class EmployeeService {
 	 * Adds a new employee
 	 */
 	@Transactional
-	public void add(String ename, String esurname, String edob, String ephone, String egender, String estart, String eaddress1, String eaddress2, Integer localityid) {
+	public void add(String ename, String esurname, String edob, String ephone, String egender, String estart, String eaddress1, String eaddress2, Integer localityid, Integer departmentid) {
 	 
 	Employee employee = new Employee();
 	EmpAddress empAddress = new EmpAddress();
-	Locality locality = dlp.getLocality(localityid);
+	EmployeeDepartment empDepartment = new EmployeeDepartment(); 
+	
+
 	
 	
 	
@@ -92,10 +96,15 @@ public class EmployeeService {
 		empAddress.setEmployee(employee);
 		empAddress.setEmpAddress1(eaddress1);
 		empAddress.setEmpAddress2(eaddress2);
-		empAddress.setLocality(locality);
+		empAddress.setLocality(dlp.getLocality(localityid));
 		
 		dlp.saveOrUpdate(empAddress);
 		
+		empDepartment.setEmployee(employee);
+		empDepartment.setEmployeeDepartmentStartDate(startDate);
+		empDepartment.setDepartment(dlp.getDepartments(departmentid));
+		
+		dlp.saveOrUpdate(empDepartment);
 	}
 	
 	/**
@@ -120,10 +129,26 @@ public class EmployeeService {
 	 * Edits an existing employee
 	 */
 	@Transactional
-	public void edit() {
-		Employee employee = null;
-
-
+	public void edit(int id, String ename, String esurname, String edob, String ephone, String egender, String estart) {
+		Employee employee = dlp.getEmployee(id);
+				
+			DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+	    	
+	    	String dobConvert = edob;
+	    	DateTime dob = fmt.parseDateTime(dobConvert);
+	    	
+	    	String startConvert = estart;
+	    	DateTime startDate = fmt.parseDateTime(startConvert);
+	    	
+	    	    	   	
+	    	employee.setEmployeeName(ename);
+	    	employee.setEmployeeSurname(esurname);
+	    	employee.setEmployeeDob(dob);
+	    	employee.setEmployeeGender(EmployeeEmployeeGenderEnum.valueOf(egender));
+	    	employee.setEmployeePhone(ephone);
+	    	employee.setEmployeeStartDate(startDate);
+	    	
+	    			
 		// Save updates
 		dlp.saveOrUpdate(employee);
 	}

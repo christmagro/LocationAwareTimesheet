@@ -21,12 +21,9 @@
 <body>
 
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
-<h2>Create New Courier</h2>
 
 
-
-
-<c:url var="saveUrl" value="/addemployee" /> 
+<c:url var="saveUrl" value="/employee/addEmployee" /> 
 <form:form id="addEmployee" modelAttribute="addEmployee"  method="POST" action="${saveUrl}">
 	<table>
 	
@@ -79,11 +76,20 @@
 		</tr>
 		
 		<tr>
-		 <td>Select Current Parcel Location</td>
+		 <td>Locality</td>
         <td>
-            <form:select path="" id="locality" name="locality">
+            <form:select path="" id="elocality" name="elocality">
             <form:option value="" label="Select" />
             <form:options  items="${elocality}" itemValue="Id" itemLabel="localityName" />
+            </form:select>
+        </td>
+		</tr> 
+		<tr>
+		 <td>Select Department</td>
+        <td>
+            <form:select path="" id="edepartment" name="edepartment">
+            <form:option value="" label="Select" />
+            <form:options  items="${edepartment}" itemValue="Id" itemLabel="departmentName" />
             </form:select>
         </td>
 		</tr> 
