@@ -34,7 +34,7 @@ public class EmployeeService {
 				
 		// Create a Hibernate query (HQL)
 
-		Query query = dlp.createQuery("FROM  Employee");
+		Query query = dlp.createQuery("FROM  Employee e where e.employeeEndDate is null");
 		// Retrieve all
 		return  query.list();
 	}
@@ -62,7 +62,7 @@ public class EmployeeService {
 	 * Adds a new employee
 	 */
 	@Transactional
-	public void add(String ename, String esurname, String edob, String ephone, String egender, String estart, String eaddress1, String eaddress2, Integer localityid, Integer departmentid) {
+	public void add(String ename, String esurname, String edob, String ephone, String egender, String username, String password,  String estart, String eaddress1, String eaddress2, Integer localityid, Integer departmentid) {
 	 
 	Employee employee = new Employee();
 	EmpAddress empAddress = new EmpAddress();
@@ -87,6 +87,8 @@ public class EmployeeService {
     	employee.setEmployeeGender(EmployeeEmployeeGenderEnum.valueOf(egender));
     	employee.setEmployeePhone(ephone);
     	employee.setEmployeeStartDate(startDate);
+    	employee.setEmployeeUsername(username);
+    	employee.setEmployeePassword(password);
     	employee.setEmployeeDeleted(false);
     			
 		// Save

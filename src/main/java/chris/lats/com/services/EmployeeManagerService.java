@@ -1,19 +1,14 @@
 package chris.lats.com.services;
 
-import java.util.Date;
-import java.util.List;
 
+import java.util.List;
 import org.hibernate.Query;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.chris.LocationAwareTimesheet.model.Departments;
 import com.chris.LocationAwareTimesheet.model.Employee;
-import com.chris.LocationAwareTimesheet.model.EmployeeDepartment;
 import com.chris.LocationAwareTimesheet.model.EmployeeManager;
 import com.chris.LocationAwareTimesheet.service.data.DataLayerLatsdbImpl;
 

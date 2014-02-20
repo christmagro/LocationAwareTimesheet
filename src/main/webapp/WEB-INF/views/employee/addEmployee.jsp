@@ -55,14 +55,22 @@
 		<tr>
 			<td><form:label path="employeePhone">Employee Phone</form:label></td>
 			<td><form:input path="employeePhone"  id="employeePhone" name="employeePhone"/></td>
-		</tr> 
+		</tr>
 		
+			
 		<tr>
 			<td><form:label path="employeeStartDate">Employee Start Date</form:label></td>
 			<td><form:input path="employeeStartDate" id="employeeStartDate" value="<%= df.format(new java.util.Date()) %>" name="employeeStartDate"/></td>
 		</tr>
 		
-		
+		<tr>
+			<td><form:label path="employeeUsername">Employee Username</form:label></td>
+			<td><form:input path="employeeUsername"  id="employeeUsername" name="employeeUsername"/></td>
+		</tr> 
+		<tr>
+			<td><form:label path="employeePassword">Employee Password</form:label></td>
+			<td><form:input path="employeePassword"  id="employeePassword" name="employeePassword"/></td>
+		</tr>  
 		
 		
 		

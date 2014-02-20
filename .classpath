@@ -25,14 +25,5 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/cmagro/.m2/repository/com/chris/locationawaretimesheet/model/1.0.1-BUILD-SNAPSHOT/model-1.0.1-BUILD-SNAPSHOT.jar" sourcepath="/Users/cmagro/.m2/repository/com/chris/locationawaretimesheet/model/1.0.1-BUILD-SNAPSHOT/model-1.0.1-BUILD-SNAPSHOT-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="com.chris.locationawaretimesheet"/>
-			<attribute name="maven.artifactId" value="model"/>
-			<attribute name="maven.version" value="1.0.1-BUILD-SNAPSHOT"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

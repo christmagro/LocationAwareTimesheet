@@ -8,18 +8,18 @@ import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import chris.lats.com.dto.EmpAddressDTO;
 import chris.lats.com.dto.EmployeeDepartmentDTO;
+import chris.lats.com.dto.EmployeeDeviceDTO;
 import chris.lats.com.dto.EmployeeManagerDTO;
 import chris.lats.com.services.DepartmentService;
 import chris.lats.com.services.EmpAddressService;
 import chris.lats.com.services.EmployeeDepartmentService;
+import chris.lats.com.services.EmployeeDeviceService;
 import chris.lats.com.services.EmployeeManagerService;
 import chris.lats.com.services.EmployeeService;
 import chris.lats.com.services.LocalityService;
@@ -28,6 +28,7 @@ import com.chris.LocationAwareTimesheet.model.Departments;
 import com.chris.LocationAwareTimesheet.model.EmpAddress;
 import com.chris.LocationAwareTimesheet.model.Employee;
 import com.chris.LocationAwareTimesheet.model.EmployeeDepartment;
+import com.chris.LocationAwareTimesheet.model.EmployeeDevice;
 import com.chris.LocationAwareTimesheet.model.EmployeeManager;
 import com.chris.LocationAwareTimesheet.model.Locality;
 
@@ -58,6 +59,9 @@ public class EmployeeController{
 	@Autowired
 	EmpAddressService empaddressService;
 	
+	@Autowired
+	EmployeeDeviceService employeedeviceService;
+	
 
 	
 	
@@ -82,6 +86,8 @@ public class EmployeeController{
 			  					 @RequestParam("employeeDob") String employeeDob, 
 			  					 @RequestParam(value="employeeGender", required=true) String employeeGender, 
 			  					 @RequestParam(value="employeePhone", required=true) String employeePhone, 
+			  					 @RequestParam(value="employeeUsername", required=true) String employeeUsername, 
+			  					 @RequestParam(value="employeePassword", required=true) String employeePassword, 
 			  					 @RequestParam("employeeStartDate") String employeeStartDate,
 			  					 @RequestParam(value="employeeaddress1") String employeeaddress1, 
 			  					 @RequestParam(value="employeeaddress2") String employeeaddress2,
@@ -91,9 +97,9 @@ public class EmployeeController{
 			  					  {
 			
 		  
-		   employeeService.add(empolyeeName, empolyeeSurname, employeeDob, employeePhone, employeeGender, employeeStartDate, employeeaddress1,employeeaddress2, localityId, departmentId);
+		   employeeService.add(empolyeeName, empolyeeSurname, employeeDob, employeePhone, employeeGender, employeeUsername, employeePassword, employeeStartDate, employeeaddress1,employeeaddress2, localityId, departmentId);
 	 
-	
+		   //don't forget to add username check with ajax and md5 hashing
 		
 		
 		   return "redirect:listEmployees";
@@ -496,6 +502,147 @@ public class EmployeeController{
 						 
 						  
 					}
+					   
+					   
+					   @RequestMapping(value = "/listEmployeeDevices", method = RequestMethod.GET)
+					   public String listEmployeeDevices(Model model) {
+						
+						   
+						List<EmployeeDevice> employeedevices = employeedeviceService.getAll(); 
+						List<EmployeeDeviceDTO> employeedeviceDTO =  new ArrayList<EmployeeDeviceDTO>();
+					    	for(EmployeeDevice employeedevice : employeedevices){
+					    		EmployeeDeviceDTO dto = new EmployeeDeviceDTO();
+					    		Employee emp = employeedevice.getEmployee(); 
+					    		dto.setId(employeedevice.getId());
+					    		dto.setEmployeeDeviceImei(employeedevice.getEmployeeDeviceImei());
+					    		dto.setEmployeeDeviceModel(employeedevice.getEmployeeDeviceModel());
+					    		dto.setEmployeeDeviceStartDate(employeedevice.getEmployeeDeviceStartDate());
+					    		dto.setEmployeeDeviceEndDate(employeedevice.getEmployeeDeviceEndDate());
+					    		dto.setEmployee(employeeService.get(emp.getId()));
+					    		
+
+					    		employeedeviceDTO.add(dto);
+					    	}
+					    	
+						
+						model.addAttribute("employeedeviceslist", employeedeviceDTO);
+						  		   
+										   
+						   return "employee/listEmployeeDevices";
+					   }
+					   
+					   
+					   @RequestMapping(value = "/addEmployeeDevice", method = RequestMethod.GET)
+						public String getaddEmployeeDevice(Model model) {
+						   
+						
+				
+							model.addAttribute("addemployeedevice", new EmployeeDevice());
+							List<Employee> employeelist = employeeService.getAll();
+							model.addAttribute("employeelist", employeelist);
+					
+							
+							
+							return "employee/addEmployeeDevice";
+							}
+
+						  	    	
+						   @RequestMapping(value = "/addEmployeeDevice", method = RequestMethod.POST)
+						   public @ResponseBody JsonResponse postaddEmployeeDevice(@RequestParam(value="employeeid", required=true) int employeeid,
+								   												   @RequestParam(value="imei", required=true) String imei,
+								   												   @RequestParam(value="model", required=true) String model)
+								  					
+								  					  {
+								
+							   JsonResponse res = new JsonResponse();
+								 int empresult = employeedeviceService.checkEmployee(employeeid);
+								 int imeiresult = employeedeviceService.checkIMEI(imei);
+								  if(imeiresult > 0){
+									res.setStatus("FAIL");
+									res.setResult("Mobile already active under another user");						 
+								  }
+								  
+								 
+								  else if(empresult > 0){
+									  res.setStatus("FAIL");
+									  res.setResult("Employee already has a phone registered");	
+								  }
+								  
+								
+								else{
+									res.setStatus("SUCCESS");
+									res.setResult("All ok");
+									employeedeviceService.add(employeeid, imei, model);
+								}
+							   
+					  
+					
+								return res;
+							}
+						   
+						   
+						   @RequestMapping(value = "/changeEmployeeDevice", method = RequestMethod.GET)
+							public String getChangeEmployeeDevice(@RequestParam(value="employeedeviceid", required=true) int employeedeviceid ,Model model) {
+							   
+							
+					
+								model.addAttribute("changeemployeedevice", employeedeviceService.get(employeedeviceid));
+						
+						
+								
+								
+								return "employee/changeEmployeeDevice";
+								}
+
+							  	    	
+							   @RequestMapping(value = "/changeEmployeeDevice", method = RequestMethod.POST)
+							   public @ResponseBody JsonResponse postChangeEmployeeDevice(@RequestParam(value="employeedeviceid", required=true) int employeedeviceid,
+									   												   @RequestParam(value="imei", required=true) String imei,
+									   												   @RequestParam(value="model", required=true) String model)
+									  					
+									  					  {
+									
+								   JsonResponse res = new JsonResponse();
+								   EmployeeDevice employeedevice = employeedeviceService.get(employeedeviceid);
+								   Employee employee = employeedevice.getEmployee();
+								   
+									
+									 int imeiresult = employeedeviceService.checkIMEI(imei);
+									  if(imeiresult > 0){
+										res.setStatus("FAIL");
+										res.setResult("Mobile already active under another user");						 
+									  }
+									  
+									
+									  
+									
+									else{
+										res.setStatus("SUCCESS");
+										res.setResult("All ok");
+										employeedeviceService.changeDevice(employeedeviceid, employee.getId(), imei, model);
+									}
+								   
+						  
+						
+									return res;
+								}
+							   
+							   
+							   
+							   @RequestMapping(value = "/removeEmployeeDevice", method = RequestMethod.GET)
+								public String removeEmployeeDevice(@RequestParam(value="employeedeviceid", required=true) int employeedeviceid ,Model model) {
+								   
+								
+						
+									employeedeviceService.removedevice(employeedeviceid);
+							
+							
+									
+									
+									return "redirect:listEmployeeDevices";
+									}
+						   
+				
 		
 			
 }
