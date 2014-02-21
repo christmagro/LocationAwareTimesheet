@@ -62,7 +62,7 @@ public class EmployeeService {
 	 * Adds a new employee
 	 */
 	@Transactional
-	public void add(String ename, String esurname, String edob, String ephone, String egender, String username, String password,  String estart, String eaddress1, String eaddress2, Integer localityid, Integer departmentid) {
+	public void add(String ename, String esurname, String edob, String ephone, String egender, String username, String password,  String estart, String eaddress1, String eaddress2, Integer localityid, Integer departmentid, String email) {
 	 
 	Employee employee = new Employee();
 	EmpAddress empAddress = new EmpAddress();
@@ -89,7 +89,7 @@ public class EmployeeService {
     	employee.setEmployeeStartDate(startDate);
     	employee.setEmployeeUsername(username);
     	employee.setEmployeePassword(password);
-    	employee.setEmployeeDeleted(false);
+    	employee.setEmployeeEmail(email);
     			
 		// Save
 		dlp.saveOrUpdate(employee);
@@ -131,7 +131,7 @@ public class EmployeeService {
 	 * Edits an existing employee
 	 */
 	@Transactional
-	public void edit(int id, String ename, String esurname, String edob, String ephone, String egender, String estart) {
+	public void edit(int id, String ename, String esurname, String edob, String ephone, String egender, String estart, String email) {
 		Employee employee = dlp.getEmployee(id);
 				
 			DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -149,6 +149,7 @@ public class EmployeeService {
 	    	employee.setEmployeeGender(EmployeeEmployeeGenderEnum.valueOf(egender));
 	    	employee.setEmployeePhone(ephone);
 	    	employee.setEmployeeStartDate(startDate);
+	    	employee.setEmployeeEmail(email);
 	    	
 	    			
 		// Save updates

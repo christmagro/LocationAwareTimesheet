@@ -37,6 +37,7 @@
 		<td>Date of Birth</td>
 		<td>Gender</td>
 		<td>Phone</td>
+		<td>Email</td>
 		<td>Start Date</td>
 		<td>Department</td>
 		<td>Edit Employee</td>
@@ -59,6 +60,7 @@
 			<td width=70px><joda:format value="${employeelist.employee.employeeDob}" pattern="dd/MM/yyyy"/></td>
 			<td width=70px><c:out value="${employeelist.employee.employeeGender}" /></td>
 			<td width=70px><c:out value="${employeelist.employee.employeePhone}" /></td>
+			<td width=70px><c:out value="${employeelist.employee.employeeEmail}" /></td>
 			<td width=70px><joda:format value="${employeelist.employee.employeeStartDate}" pattern="dd/MM/yyyy"/></td>
 			<td width=70px><c:out value="${employeelist.department.departmentName}" /></td>
 			<td width=90px><a href="${editEmployee}">Edit Employee</a></td>

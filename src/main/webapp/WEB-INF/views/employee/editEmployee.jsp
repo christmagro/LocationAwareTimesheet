@@ -58,6 +58,12 @@
 			<td><form:input path="employeePhone" value="${editEmployee.employeePhone}" id="employeePhone" name="employeePhone"/></td>
 		</tr> 
 		
+		
+		<tr>
+			<td><form:label path="employeeEmail">Employee Email</form:label></td>
+			<td><form:input path="employeeEmail" value="${editEmployee.employeeEmail}" id="employeeEmail" name="employeeEmail"/></td>
+		</tr> 
+		
 		<tr>
 			<td><form:label path="employeeStartDate">Employee Start Date</form:label></td>
 			<td><form:input path="employeeStartDate" value="${start}" id="employeeStartDate"  name="employeeStartDate"/></td>

@@ -83,6 +83,15 @@ public class EmployeeManagerService {
 	}
 	
 	@Transactional
+	public int  checkAddEmployeeDepartment(int empid, int deptid) {
+			
+	Query query = dlp.createQuery("from EmployeeDepartment ed where ed.employeeDepartmentEndDate is null and ed.employee ='" + empid + "' and ed.department ='" + deptid + "'");
+
+	return query.list().size();
+						
+	}
+	
+	@Transactional
 	public void  AddEmployeeManager(int empid, int deptid) {
 	
 	

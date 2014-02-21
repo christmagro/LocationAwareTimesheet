@@ -16,7 +16,7 @@
 		<script src="../resources/TableFilter/tfAdapter.sortabletable.js" language="javascript" type="text/javascript"></script>
 		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
 		<script type="text/javascript" src="../resources/js/jquery.js"></script>
-		<script type="text/javascript" src="../resources/js/employeedevice.js"></script>
+		<script type="text/javascript" src="../resources/js/ajaxfunctions.js"></script>
 		<script>
  		 function preventBack(){window.history.forward();}
  		 setTimeout("preventBack()", 0);
@@ -55,7 +55,7 @@
 		</tr>
 		
 
-<tr><td><input id="button" type="button" value="Submit" onclick="doAjaxPost()"></td></tr>	
+<tr><td><input id="button" type="button" value="Submit" onclick="doAddEmployeeDevice()"></td></tr>	
 <div id="error" class="error"></div>
 <div id="info" class="success"></div>
 

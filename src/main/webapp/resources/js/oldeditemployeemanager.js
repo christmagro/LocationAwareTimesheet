@@ -7,7 +7,7 @@ function doAjaxPost() {
 $.ajax({  
   type: "POST", 
   url: "editEmployeeManager",
-  data : { "employeeId":$("#employeeId").val(), "employeemanagerId":$("#employeemanagerId").val()},
+  data : { "employeeId":$("#employeeId").val(),  "departmentId":$("#departmentId").val(), "employeemanagerId":$("#employeemanagerId").val()},
   success: function(response){
     // we have the response 
 	 

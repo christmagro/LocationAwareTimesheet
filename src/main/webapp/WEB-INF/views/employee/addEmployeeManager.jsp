@@ -16,7 +16,7 @@
 		<script src="../resources/TableFilter/tfAdapter.sortabletable.js" language="javascript" type="text/javascript"></script>
 		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
 		<script type="text/javascript" src="../resources/js/jquery.js"></script>
-		<script type="text/javascript" src="../resources/js/employeemanager.js"></script>
+		<script type="text/javascript" src="../resources/js/ajaxfunctions.js"></script>
 		
 	
 </head>
@@ -35,7 +35,9 @@
         <td>
             <form:select path="" id="employeeId" name="employeeId">
             <form:option value="" label="Select" />
-            <form:options  items="${employeelist}" itemValue="Id" itemLabel="employeeName" />
+            <c:forEach var="employee" items="${employeelist}">
+        	<form:option value="${employee.id}"><c:out value="${employee.employeeName} ${employee.employeeSurname}"/></form:option>
+    		</c:forEach>
             </form:select>
         </td>
 		</tr> 
@@ -49,7 +51,7 @@
         </td>
 		</tr> 
 
-<tr><td><input id="button" type="button" value="Submit" onclick="doAjaxPost()"></td></tr>	
+<tr><td><input id="button" type="button" value="Submit" onclick="doAddEmployeeManager()"></td></tr>	
 <div id="error" class="error"></div>
 <div id="info" class="success"></div>
 

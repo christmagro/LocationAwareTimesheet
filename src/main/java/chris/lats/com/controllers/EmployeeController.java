@@ -87,7 +87,8 @@ public class EmployeeController{
 			  					 @RequestParam(value="employeeGender", required=true) String employeeGender, 
 			  					 @RequestParam(value="employeePhone", required=true) String employeePhone, 
 			  					 @RequestParam(value="employeeUsername", required=true) String employeeUsername, 
-			  					 @RequestParam(value="employeePassword", required=true) String employeePassword, 
+			  					 @RequestParam(value="employeePassword", required=true) String employeePassword,
+			  					 @RequestParam(value="employeeEmail", required=true) String employeeEmail,
 			  					 @RequestParam("employeeStartDate") String employeeStartDate,
 			  					 @RequestParam(value="employeeaddress1") String employeeaddress1, 
 			  					 @RequestParam(value="employeeaddress2") String employeeaddress2,
@@ -97,7 +98,7 @@ public class EmployeeController{
 			  					  {
 			
 		  
-		   employeeService.add(empolyeeName, empolyeeSurname, employeeDob, employeePhone, employeeGender, employeeUsername, employeePassword, employeeStartDate, employeeaddress1,employeeaddress2, localityId, departmentId);
+		   employeeService.add(empolyeeName, empolyeeSurname, employeeDob, employeePhone, employeeGender, employeeUsername, employeePassword, employeeStartDate, employeeaddress1,employeeaddress2, localityId, departmentId, employeeEmail);
 	 
 		   //don't forget to add username check with ajax and md5 hashing
 		
@@ -172,13 +173,14 @@ public class EmployeeController{
 				  					 @RequestParam(value="employeeSurname", required=true) String empolyeeSurname,
 				  					 @RequestParam("employeeDob") String employeeDob, 
 				  					 @RequestParam(value="employeeGender", required=true) String employeeGender, 
-				  					 @RequestParam(value="employeePhone", required=true) String employeePhone, 
+				  					 @RequestParam(value="employeePhone", required=true) String employeePhone,
+				  					@RequestParam(value="employeeEmail", required=true) String employeeEmail, 
 				  					 @RequestParam("employeeStartDate") String employeeStartDate)
 				  					
 				  					  {
 				
 			  
-			   employeeService.edit(empolyeeId,empolyeeName, empolyeeSurname, employeeDob, employeePhone, employeeGender, employeeStartDate);
+			   employeeService.edit(empolyeeId,empolyeeName, empolyeeSurname, employeeDob, employeePhone, employeeGender, employeeStartDate, employeeEmail);
 		 
 		
 			
@@ -303,6 +305,7 @@ public class EmployeeController{
 					JsonResponse res = new JsonResponse();
 					 int deptresult = employeemanagerService.checkAddDepartmentManager(departmentId);
 					 int empresult = employeemanagerService.checkAddEmployeeManager(employeeId);
+					 int empdeptresult = employeemanagerService.checkAddEmployeeDepartment(employeeId, departmentId);
 					  if(deptresult > 0){
 						res.setStatus("FAIL");
 						res.setResult("Department already have a Manager");						 
@@ -311,7 +314,12 @@ public class EmployeeController{
 					 
 					  else if(empresult > 0){
 						  res.setStatus("FAIL");
-						  res.setResult("Managers is already allocated to a department");	
+						  res.setResult("Manager is already allocated to a department");	
+					  }
+					  
+					  else if(empdeptresult != 1){
+						  res.setStatus("FAIL");
+						  res.setResult("Selected employee is not yet a member of the selected department");	
 					  }
 					  
 					
@@ -341,7 +349,7 @@ public class EmployeeController{
 				   
 				   model.addAttribute("editemployeemanager", employeemanager);
 				   model.addAttribute("employee", emp.getEmployeeName() + " " + emp.getEmployeeSurname());
-				   model.addAttribute("department", dept.getDepartmentName());
+				   model.addAttribute("department", dept);
 				   model.addAttribute("employeelist", employeeService.getAll());
 				   
 								   
@@ -351,16 +359,23 @@ public class EmployeeController{
 			   
 			  @RequestMapping(value = "/editEmployeeManager", method = RequestMethod.POST)
 				  public @ResponseBody JsonResponse posteditEmployeeManager(@RequestParam(value="employeemanagerId", required=true) int employeemanagerId,
-						 @RequestParam(value="employeeId", required=true) int employeeId){
+						  													@RequestParam(value="departmentId", required=true) int departmentId,
+						  													@RequestParam(value="employeeId", required=true) int employeeId){
 						
 			  			JsonResponse res = new JsonResponse();
 			  			int empresult = employeemanagerService.checkAddEmployeeManager(employeeId);
-					  
+			  			int empdeptresult = employeemanagerService.checkAddEmployeeDepartment(employeeId, departmentId);
+			  			
 	 
 			  			if(empresult > 0){
 			  			res.setStatus("FAIL");
-			  			res.setResult("Managers is already allocated to a department");	
+			  			res.setResult("Manager is already allocated to a department");	
 			  			}
+			  			
+			  			else if(empdeptresult != 1){
+							  res.setStatus("FAIL");
+							  res.setResult("Selected employee is not yet a member of the selected department");	
+						  }
 	  
 	
 						else{

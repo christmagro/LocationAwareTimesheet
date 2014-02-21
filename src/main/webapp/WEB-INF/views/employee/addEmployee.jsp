@@ -69,10 +69,13 @@
 		</tr> 
 		<tr>
 			<td><form:label path="employeePassword">Employee Password</form:label></td>
-			<td><form:input path="employeePassword"  id="employeePassword" name="employeePassword"/></td>
+			<td><form:input path="employeePassword" type="password" id="employeePassword" name="employeePassword"/></td>
 		</tr>  
 		
-		
+		<tr>
+			<td><form:label path="employeeEmail">Employee E-Mail</form:label></td>
+			<td><form:input path="employeeEmail"  id="employeePassword" name="employeeEmail"/></td>
+		</tr> 
 		
 			<tr>
 			<td>Address 1</td>
