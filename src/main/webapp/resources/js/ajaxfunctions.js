@@ -125,3 +125,33 @@ $.ajax({
 });  
 } 
 
+
+function doCheckEmployeePermission() {  
+	var delay = 1000; //Your delay in milliseconds
+	var empid = $("#employeeid").val();
+
+$.ajax({  
+  type: "POST", 
+  url: "addEmployeePermission",
+  data : { "permissionid":$("#permissionid").val(), "employeeid":$("#employeeid").val()},
+  success: function(response){
+    // we have the response 
+	 
+    if(response.status == "SUCCESS"){
+  	
+    	 $('#info').html("Record updated succesfull");
+    	 $('#button').hide();
+   	     setTimeout(function(){ window.location.href = "listEmployeePermissions?employeeid="+ empid;}, delay); 
+    }else{
+  	   	
+  	  $('#error').html("Please correct following errors: " + response.result);
+  	  $('#info').hide('slow');
+  	  $('#error').show('slow');
+    }	      
+  },  
+  error: function(e){  
+    alert('Error: ' + e);  
+  }  
+});  
+} 
+

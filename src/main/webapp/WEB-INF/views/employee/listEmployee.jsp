@@ -8,13 +8,16 @@
 <html>
 <head>
 	<title>Create Employee</title>
+	
+		<link rel="stylesheet" type="text/css" href="../resources/TableFilter/filtergrid.css">
 	<!-- Scripts -->
 		<script type="text/javascript" src="../resources/js/jquery-1.7.1.js"></script>
 		<script type="text/javascript" src="../resources/js/jquery.dropotron-1.0.js"></script>
 		<script type="text/javascript" src="../resources/js/init.js"></script>
-		<script src="../resources/TableFilter/tablefilter_all.js" language="javascript" type="text/javascript"></script>
-		<script src="../resources/TableFilter/sortabletable.js" language="javascript" type="text/javascript"></script>
-		<script src="../resources/TableFilter/tfAdapter.sortabletable.js" language="javascript" type="text/javascript"></script>
+		<script type="text/javascript" src="../resources/TableFilter/tablefilter_all.js" ></script>
+		<script type="text/javascript" src="../resources/TableFilter/sortabletable.js"></script>
+		<script type="text/javascript" src="../resources/TableFilter/tfAdapter.sortabletable.js" ></script>
+		<script type="text/javascript" src="../resources/TableFilter/ezEditTable/ezEditTable.js" ></script>
 		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
 		<script type="text/javascript" src="../resources/js/jquery-ui-1.8.js"></script>
 </head>
@@ -27,22 +30,23 @@
 
 
 
-	<table>
+	<table id="employeeTable">
 		
 		<thead>
 		<tr>
-		<td>Id</td>
-		<td>Name</td>
-		<td>Surname</td>
-		<td>Date of Birth</td>
-		<td>Gender</td>
-		<td>Phone</td>
-		<td>Email</td>
-		<td>Start Date</td>
-		<td>Department</td>
-		<td>Edit Employee</td>
-		<td>View Addresses</td>
-		<td>Change Department</td>
+		<th align = "center" class="center">Id</th>
+		<th align = "center" class="center">Name</th>
+		<th align = "center" class="center">Surname</th>
+		<th align = "center" class="center">Date of Birth</th>
+		<th align = "center" class="center">Gender</th>
+		<th align = "center" class="center">Phone</th>
+		<th align = "center" class="center">Email</th>
+		<th align = "center" class="center">Start Date</th>
+		<th align = "center" class="center">Department</th>
+		<th align = "center" class="center">Edit Employee</th>
+		<th align = "center" class="center">View Addresses</th>
+		<th align = "center" class="center">Change Department</th>
+		<th align = "center" class="center">View Permissions</th>
 	
 		</tr>
 		</thead>
@@ -51,22 +55,23 @@
 			<c:url var="editEmployee" value="/employee/editEmployee?id=${employeelist.employee.id}" />
 			<c:url var="changeDept" value="/employee/editEmployeeDepartment?id=${employeelist.employee.id}" />
 			<c:url var="viewAddresses" value="/employee/listEmpAddresses?employeeid=${employeelist.employee.id}" />
+			<c:url var="viewPermissions" value="/employee/listEmployeePermissions?employeeid=${employeelist.employee.id}" />
 		
 		
 		<tr>
-			<td width=100px><c:out value="${employeelist.employee.id}" /></td>	
-			<td width=100px><c:out value="${employeelist.employee.employeeName}" /></td>
-			<td width=100px><c:out value="${employeelist.employee.employeeSurname}" /></td>
-			<td width=70px><joda:format value="${employeelist.employee.employeeDob}" pattern="dd/MM/yyyy"/></td>
-			<td width=70px><c:out value="${employeelist.employee.employeeGender}" /></td>
-			<td width=70px><c:out value="${employeelist.employee.employeePhone}" /></td>
-			<td width=70px><c:out value="${employeelist.employee.employeeEmail}" /></td>
-			<td width=70px><joda:format value="${employeelist.employee.employeeStartDate}" pattern="dd/MM/yyyy"/></td>
-			<td width=70px><c:out value="${employeelist.department.departmentName}" /></td>
-			<td width=90px><a href="${editEmployee}">Edit Employee</a></td>
-			<td width=90px><a href="${viewAddresses}">View Addresses</a></td>
-			<td width=90px><a href="${changeDept}">Change Department</a></td>
-		
+			<td align = "center" class="center"><c:out value="${employeelist.employee.id}" /></td>	
+			<td align = "center" class="center"><c:out value="${employeelist.employee.employeeName}" /></td>
+			<td align = "center" class="center"><c:out value="${employeelist.employee.employeeSurname}" /></td>
+			<td align = "center" class="center"><joda:format value="${employeelist.employee.employeeDob}" pattern="dd/MM/yyyy"/></td>
+			<td align = "center" class="center"><c:out value="${employeelist.employee.employeeGender}" /></td>
+			<td align = "center" class="center"><c:out value="${employeelist.employee.employeePhone}" /></td>
+			<td align = "center" class="center"><c:out value="${employeelist.employee.employeeEmail}" /></td>
+			<td align = "center" class="center"><joda:format value="${employeelist.employee.employeeStartDate}" pattern="dd/MM/yyyy"/></td>
+			<td align = "center" class="center"><c:out value="${employeelist.department.departmentName}" /></td>
+			<td align = "center" class="center"><a href="${editEmployee}"><img src="../resources/images/edit.png" alt="Edit Employee Details" width="25px" height="25px" ></a></td>
+			<td align = "center" class="center"><a href="${viewAddresses}"><img src="../resources/images/address.png" alt="View Employee Addresses" width="25px" height="25px" ></a></td>
+			<td align = "center" class="center"><a href="${changeDept}"><img src="../resources/images/department.png" alt="Change Employee Department" width="25px" height="25px" ></a></td>
+			<td align = "center" class="center"><a href="${viewPermissions}"><img src="../resources/images/department.png" alt="Change Employee Department" width="25px" height="25px" ></a></td>
 			 
 			
 		</tr>
@@ -75,6 +80,53 @@
 		
 	</table>
 	
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[	
+	var props = {
+	
+	sort_config: { 
+		async_sort:true, 
+		sort_types:['Number', 'String', 'String', 'dmydate', 'String', 'Number', 'dmydate', 'String', 'String', 'none', 'none','none']
+	},
+	paging: true,  
+    paging_length: 100,
+	col_4:"Select",
+	col_9:"none",
+	col_10:"none",
+	col_11:"none",
+	col_12:"none",
+	col_width: ["20px","40px","50px","40px","20px","40px", "50px","40px","60px","30px","30px","30px","30px"],
+	results_per_page: ['# rows per page',[10,100]], 
+    rows_counter: true,  
+    rows_counter_text: "Rows:",  
+    btn_reset: true,  
+    loader: true,  
+    loader_html: '<h5 style="color:black;">Loading, please wait...</h5>',  
+	alternate_rows: true,
+	paging: true,  
+    paging_length: 10,
+	on_keyup: true,  
+    on_keyup_delay: 500,  
+  	
+    selectable: true,  
+    editable: true,  
+    
+  
+    //Grid layout properties  
+    grid_layout: true,  
+    grid_width: '920px',  
+    grid_height: '400px',
+      
+    /*** Extensions manager ***/  
+    
+    btn_showHide_cols_text: 'Columns▼' 
+				
+	
+		
+	}
+	var tf = setFilterGrid("employeeTable",props);
+//]]>
+  </script>
 
 
 </body>

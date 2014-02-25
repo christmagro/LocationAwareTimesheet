@@ -16,21 +16,27 @@ import chris.lats.com.dto.EmpAddressDTO;
 import chris.lats.com.dto.EmployeeDepartmentDTO;
 import chris.lats.com.dto.EmployeeDeviceDTO;
 import chris.lats.com.dto.EmployeeManagerDTO;
+import chris.lats.com.dto.EmployeePermissionDTO;
 import chris.lats.com.services.DepartmentService;
 import chris.lats.com.services.EmpAddressService;
 import chris.lats.com.services.EmployeeDepartmentService;
 import chris.lats.com.services.EmployeeDeviceService;
 import chris.lats.com.services.EmployeeManagerService;
+import chris.lats.com.services.EmployeePermissionService;
 import chris.lats.com.services.EmployeeService;
 import chris.lats.com.services.LocalityService;
 import chris.lats.com.services.JsonResponse;
+import chris.lats.com.services.PermissionService;
+
 import com.chris.LocationAwareTimesheet.model.Departments;
 import com.chris.LocationAwareTimesheet.model.EmpAddress;
 import com.chris.LocationAwareTimesheet.model.Employee;
 import com.chris.LocationAwareTimesheet.model.EmployeeDepartment;
 import com.chris.LocationAwareTimesheet.model.EmployeeDevice;
 import com.chris.LocationAwareTimesheet.model.EmployeeManager;
+import com.chris.LocationAwareTimesheet.model.EmployeePermission;
 import com.chris.LocationAwareTimesheet.model.Locality;
+import com.chris.LocationAwareTimesheet.model.Permission;
 
 /**
  * Handles requests for the application home page.
@@ -62,7 +68,11 @@ public class EmployeeController{
 	@Autowired
 	EmployeeDeviceService employeedeviceService;
 	
+	@Autowired
+	PermissionService permissionService;
 
+	@Autowired
+	EmployeePermissionService employeepermissionService;
 	
 	
 	@RequestMapping(value = "/addEmployee", method = RequestMethod.GET)
@@ -656,8 +666,188 @@ public class EmployeeController{
 									
 									return "redirect:listEmployeeDevices";
 									}
-						   
+							   
+							   
+							   @RequestMapping(value = "/listPermissions", method = RequestMethod.GET)
+							   public String listPermissions(Model model) {
+								
+								   
+								List<Permission> permissionlist = permissionService.getAll();
+							
+
+							  
+							    	
+								
+								model.addAttribute("permissionlist", permissionlist);
+								  		   
+												   
+								   return "employee/listPermissions";
+							   }
+							   
+							   @RequestMapping(value = "/addPermission", method = RequestMethod.GET)
+								public String getAddOPermission(Model model) {
+											
+									//Creating new Employee and mapping in the view
+									
+									model.addAttribute("addPermission", new Permission());
+									//Getting Locality list to generate dropdownlist in the view
+								
+									return "employee/addPermission";
+									}
+
+								  	    	
+								   @RequestMapping(value = "/addPermission", method = RequestMethod.POST)
+								  public String postAddPermission(@RequestParam(value="permissionName", required=true) String permisisonName)
+										  										  					
+										  					  {
+										
+									  
+									  
+									   permissionService.addPermission(permisisonName);
+									
+									
+									   return "redirect:listPermissions";
+							   
+										  					  }
+								   
+								   @RequestMapping(value = "/editPermission", method = RequestMethod.GET)
+									public String getEditOPermission(@RequestParam(value="permissionid", required=true) int permisisonId, Model model) {
+												
+										//Creating new Employee and mapping in the view
+										
+										model.addAttribute("editPermission", permissionService.get(permisisonId));
+										
+									
+										return "employee/editPermission";
+										}
+
+									  	    	
+									   @RequestMapping(value = "/editPermission", method = RequestMethod.POST)
+									  public String postEditPermission(@RequestParam(value="permissionid", required=true) int permisisonId,
+											  @RequestParam(value="permissionName", required=true) String permissionName)
+											  										  					
+											  					  {			
+										  
+										  
+										   permissionService.editPermission(permisisonId, permissionName);
+										
+										   return "redirect:listPermissions";
+								   
+											  					  }
+									   
+									   
+									   @RequestMapping(value = "/disablePermission", method = RequestMethod.GET)
+										public String disablePermission(@RequestParam(value="permissionid", required=true) int permisisonId, Model model) {
+													
+											//Creating new Employee and mapping in the view
+											
+											permissionService.disablePermission(permisisonId);
+											
+										
+											 return "redirect:listPermissions";
+											}
+									   
+									   @RequestMapping(value = "/enablePermission", method = RequestMethod.GET)
+										public String enablePermission(@RequestParam(value="permissionid", required=true) int permisisonId, Model model) {
+													
+											//Creating new Employee and mapping in the view
+											
+											permissionService.enablePermission(permisisonId);
+											
+											 return "redirect:listPermissions";
+											}
+									   
+									   @RequestMapping(value = "/listEmployeePermissions", method = RequestMethod.GET)
+									   public String listEmployeePermissions(@RequestParam(value="employeeid", required=true) int employeeid, Model model) {
+										
+										List<EmployeePermission> employeepermissions =  employeepermissionService.getEmployeePermission(employeeid);
+										List<EmployeePermissionDTO> employeepermissionDTO = new ArrayList<EmployeePermissionDTO>();
+										for(EmployeePermission employeepermission : employeepermissions){
+											EmployeePermissionDTO dto = new EmployeePermissionDTO();
+											Employee employee = employeepermission.getEmployee();
+											Permission permission = employeepermission.getPermission();
+										    dto.setEmployee(employeeService.get(employee.getId()));
+											dto.setPermission(permissionService.get(permission.getId()));
+											
+										
+											dto.setId(employeepermission.getId());
+											employeepermissionDTO.add(dto);
+											
+										}
+										   
+									
+										   
+										model.addAttribute("employeepermissionlist", employeepermissionDTO);
+										model.addAttribute("employeeid", employeeid);
+										  		   
+														   
+										   return "employee/listEmployeePermissions";
+									   }
+
+
+									
 				
-		
+									
+									@RequestMapping(value = "/addEmployeePermission", method = RequestMethod.GET)
+									public String getAddEmployeePermission(Model model, 
+																		  @RequestParam(value="employeeid", required=true) int employeeid) {
+												
+										//Creating new Employee and mapping in the view
+										model.addAttribute("employeeid", employeeid);
+										model.addAttribute("permissionlist", permissionService.getAll());
+										model.addAttribute("addEmployeePermission", new EmployeePermission());
+										
+										
+									
+										return "employee/addEmployeePermission";
+										}
+
+									  	    	
+									   @RequestMapping(value = "/addEmployeePermission", method = RequestMethod.POST)
+									  public @ResponseBody JsonResponse postAddEmployeePermission(@RequestParam(value="permissionid", required=true) int permissionid,
+											  								  @RequestParam(value="employeeid", required=true) int employeeid)
+											  										  					
+											  					  {			
+										 JsonResponse res = new JsonResponse();
+										  	int emppermresult =  employeepermissionService.checkEmployeePermission(employeeid, permissionid);
+											  if(emppermresult != 0){
+												res.setStatus("FAIL");
+												Employee employee = employeeService.get(employeeid);
+												Permission permission = permissionService.get(permissionid);
+												
+												
+												res.setResult(employee.getEmployeeUsername().toString() + " already has permission for " + permission.getPermissionName().toString());
+												
+												
+											  }
+											 
+											
+											else{
+												res.setStatus("SUCCESS");
+												res.setResult("All ok");
+												employeepermissionService.addEmployeePermission(employeeid, permissionid);
+											}
+										   
+
+
+											return res;
+				
+											 }
+									   
+									   
+									   @RequestMapping(value = "/removeEmployeePermission", method = RequestMethod.GET)
+										public String removeEmployeePermission(Model model, 
+																			  @RequestParam(value="employeepermissionid", required=true) int employeepermissionid) {
+											
+										   EmployeePermission employeepermission = employeepermissionService.get(employeepermissionid);
+										   Employee employee = employeepermission.getEmployee();
+										   int empid = employee.getId();
+										   employeepermissionService.removeEmployeePermission(employeepermissionid);
+											
+										
+											return "redirect:listEmployeePermissions?employeeid="+ empid;
+											}
+									  
+		}
 			
-}
+
