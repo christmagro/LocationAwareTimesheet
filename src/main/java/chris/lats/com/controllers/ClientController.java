@@ -1,5 +1,8 @@
 package chris.lats.com.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,7 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.chris.LocationAwareTimesheet.model.Client;
+import com.chris.LocationAwareTimesheet.model.ClientDetails;
+import com.chris.LocationAwareTimesheet.model.Locality;
 
+import chris.lats.com.dto.ClientDetailsDTO;
+import chris.lats.com.services.ClientDetailsService;
 import chris.lats.com.services.ClientService;
 import chris.lats.com.services.LocalityService;
 
@@ -22,6 +29,9 @@ public class ClientController {
 	
 	@Autowired
 	ClientService clientService;
+	
+	@Autowired
+	ClientDetailsService clientdetailsService;
 	
 	
 	
@@ -43,7 +53,7 @@ public class ClientController {
 			  					 @RequestParam(value="clientAddress2") String clientAddress2,
 			  					 @RequestParam(value="contactName") String contactName,
 			  					 @RequestParam(value="contactSurname") String contactSurname,
-			  					 @RequestParam(value="contactSurname") String contactDescription,
+			  					 @RequestParam(value="contactDescription") String contactDescription,
 			  					 @RequestParam(value="contactPhone") String contactPhone,
 			  					 @RequestParam(value="contactEmail") String contactEmail,
 			  					 @RequestParam(value="localityid") Integer localityid)
@@ -108,5 +118,112 @@ public class ClientController {
 				 clientService.enableClient(clientid);
 			
 				 return "redirect:listClients";
-				} 
+				}
+		   
+		   @RequestMapping(value = "/addClientDetails", method = RequestMethod.GET)
+			public String getAddClientDetails(@RequestParam(value="clientid", required=true) String clientid, Model model) {
+			   
+			    model.addAttribute("clientid", clientid);
+				model.addAttribute("localitylist", localityService.getAll());
+				model.addAttribute("addclientdetails", new ClientDetails());
+				return "client/addClientDetails";
+				}
+
+		   
+			   @RequestMapping(value = "/addClientDetails", method = RequestMethod.POST)
+			  public String postAddClientDetails(@RequestParam(value="clientid", required=true) int clientid,
+					  					 @RequestParam(value="contactName") String contactName,
+					  					 @RequestParam(value="contactSurname") String contactSurname,
+					  					 @RequestParam(value="contactDescription") String contactDescription,
+					  					 @RequestParam(value="contactAddress1") String contactAddress1,
+					  					 @RequestParam(value="contactAddress2") String contactAddress2,
+					  					 @RequestParam(value="contactPhone") String contactPhone,
+					  					 @RequestParam(value="contactEmail") String contactEmail,
+					  					 @RequestParam(value="localityid") Integer localityid)
+					  					  {
+			  						  
+					  						  
+					
+				  
+				   clientdetailsService.addClientDetails(clientid, contactAddress1, contactAddress2, localityid, contactName, contactSurname, contactDescription, contactPhone, contactEmail);
+				   
+				   return "redirect:listClientDetails?clientid="+clientid;
+				  
+			}
+			   
+			   @RequestMapping(value = "/listClientDetails", method = RequestMethod.GET)
+				public String listClientsDetails(@RequestParam(value="clientid", required=true) int clientid, Model model) {
+				
+				 
+				   List<ClientDetails> clientdetails = clientdetailsService.getAll(clientid);
+				   List<ClientDetailsDTO> clientdetailsDTO = new ArrayList<ClientDetailsDTO>();
+				   for(ClientDetails clientdetail : clientdetails){
+					   ClientDetailsDTO dto = new ClientDetailsDTO();
+					   dto.setId(clientdetail.getId());
+					   dto.setClientDetailsContactName(clientdetail.getClientDetailsContactName());
+					   dto.setClientDetailsContactSurname(clientdetail.getClientDetailsContactSurname());
+					   dto.setClientDetailsContactDescription(clientdetail.getClientDetailsContactDescription());
+					   dto.setClientDetailsAddress1(clientdetail.getClientDetailsAddress1());
+					   dto.setClientDetailsAddress2(clientdetail.getClientDetailsAddress2());
+					   dto.setClientDetailsContactPhone(clientdetail.getClientDetailsContactPhone());
+					   dto.setClientDetailsContactEmail(clientdetail.getClientDetailsContactEmail());
+					   Locality locality = clientdetail.getLocality();
+					   dto.setLocality(localityService.getId(locality.getId()));
+					   clientdetailsDTO.add(dto);
+					   
+				   }
+				   
+				   
+				   
+					model.addAttribute("clientid", clientid);
+					model.addAttribute("clientdetailsslist", clientdetailsDTO);
+					return "client/listClientDetails";
+					} 
+			   
+			   
+			   
+			   @RequestMapping(value = "/editClientDetails", method = RequestMethod.GET)
+				public String getEditClientDetails(@RequestParam(value="clientdetailsid", required=true) int clientdetailsid, Model model) {
+				   
+				   ClientDetails clientdetails = clientdetailsService.get(clientdetailsid);
+				   Locality locality = clientdetails.getLocality();
+				   
+				    model.addAttribute("locality", localityService.getId(locality.getId()));
+				  	model.addAttribute("localitylist", localityService.getAll());
+					model.addAttribute("editclientdetails", clientdetails);
+					return "client/editClientDetails";
+					}
+
+			   
+				   @RequestMapping(value = "/editClientDetails", method = RequestMethod.POST)
+				  public String postEditClientDetails(@RequestParam(value="clientdetailsid", required=true) int clientdetailsid,
+						  					 @RequestParam(value="contactName") String contactName,
+						  					 @RequestParam(value="contactSurname") String contactSurname,
+						  					 @RequestParam(value="contactDescription") String contactDescription,
+						  					 @RequestParam(value="contactAddress1") String contactAddress1,
+						  					 @RequestParam(value="contactAddress2") String contactAddress2,
+						  					 @RequestParam(value="contactPhone") String contactPhone,
+						  					 @RequestParam(value="contactEmail") String contactEmail,
+						  					 @RequestParam(value="localityid") Integer localityid)
+						  					  {
+				  						  
+						  						  
+					
+					  int clientid =  clientdetailsService.editClientDetails(clientdetailsid, contactAddress1, contactAddress2, localityid, contactName, contactSurname, contactDescription, contactPhone, contactEmail);
+					   
+					   return "redirect:listClientDetails?clientid="+clientid;
+						  					  }
+				   
+				   
+				   @RequestMapping(value = "/removeClientDetails", method = RequestMethod.GET)
+					public String removeClientsDetails(@RequestParam(value="clientdetailsid", required=true) int clientdetailsid, Model model) {
+					   
+					 ClientDetails clientdetails =  clientdetailsService.get(clientdetailsid);
+					 Client client = clientdetails.getClient();
+					 clientdetailsService.removeClientDetails(clientdetailsid);
+					
+					 
+						return "redirect:listClientDetails?clientid="+ client.getId();
+						} 
+		   
 }

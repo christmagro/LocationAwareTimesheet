@@ -33,6 +33,12 @@ public class ClientService {
 		
 		return query.list();
 	}
+	@Transactional
+	public List<Client> getAllEnable() {
+		Query query = dlp.createQuery("From Client");
+		
+		return query.list();
+	}
 	
 	@Transactional
 	public void addClient(String clientName, String clientVat,

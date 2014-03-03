@@ -52,7 +52,7 @@
 			<c:url var="editClient" value="/client/editClient?clientid=${clientslist.id}" />
 			<c:url var="onholdStatus" value="/client/onHoldClient?clientid=${clientslist.id}" />
 			<c:url var="activateStatus" value="/client/activateClient?clientid=${clientslist.id}" />
-			<c:url var="viewContacts" value="/client/clientDetails?clientid=${clientslist.id}" />
+			<c:url var="viewContacts" value="/client/listClientDetails?clientid=${clientslist.id}" />
 		
 		
 		
@@ -74,7 +74,7 @@
 					
 			<td align = "center" class="center">
 			<c:if test="${clientslist.isClientOnhold()==false}"><a href="${onholdStatus}"><img src="../resources/images/enable.png" alt="Put client on hold" width="25px" height="25px" ></a></c:if>
-			<c:if test="${clientslist.isClientOnhold()==true}"><a href="${activateStatus}"><img src="../resources/images/activate.png" alt="Activate client" width="25px" height="25px" ></a></c:if>
+			<c:if test="${clientslist.isClientOnhold()==true}"><a href="${activateStatus}"><img src="../resources/images/disable.png" alt="Activate client" width="25px" height="25px" ></a></c:if>
 			</td>
 			
 			
@@ -96,7 +96,8 @@
 	},
 	paging: true,  
     paging_length: 100,
-	col_6:"none",
+    col_5:"select",
+    col_6:"none",
 	col_7:"none",
 	col_8:"none",
 	col_width: ["20px","90px","100px","90px","100px","60px","50px","50px","50px"],
@@ -118,7 +119,7 @@
   
     //Grid layout properties  
     grid_layout: true,  
-    grid_width: '710px',  
+    grid_width: '800px',  
     grid_height: '400px',
       
     /*** Extensions manager ***/  

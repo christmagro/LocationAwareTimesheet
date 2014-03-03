@@ -24,10 +24,7 @@ public class EmployeeDepartmentService {
 	
 	@Transactional
 	public EmployeeDepartment get( Integer id ) {
-		// Retrieve session from Hibernate
-		//Session session = sessionFactory.getCurrentSession();
 		
-		// Retrieve existing courierin first
 		EmployeeDepartment employeedepartment=  dlp.getEmployeeDepartment(id);
 		
 		
