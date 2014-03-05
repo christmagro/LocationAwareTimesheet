@@ -1,0 +1,99 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                    http://www.springframework.org/schema/security 
+                    http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+                    
+                    
+   <beans:bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
+	   <beans:property name="ignoreResourceNotFound"><beans:value>true</beans:value></beans:property>   <!--  In the properties file, override the items you need in this format:
+	mainDataSource.user=root
+	mainDataSource.password=abcdefgh
+    -->
+   		<beans:property name="location">
+   			<!--  You may use file:d:/temp/db.properties etc here -->
+    		<beans:value>classpath:LocationAwareTimesheet.jdbcdb.properties</beans:value>
+    	</beans:property>
+	</beans:bean>                 
+
+  <beans:bean id="dataSourceSecurity" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+ 
+	<beans:property name="driverClassName" value=" " /> <!-- value have been configured in the trackingsystem.jdbcdb.properties -->
+	<beans:property name="url" value="jdbc:mysql://localhost:3306/latsdb"/>
+	<beans:property name="username" value="root" />
+	<beans:property name="password" value="pass" />
+   </beans:bean>
+   
+   
+      
+ <http auto-config="true" use-expressions="true">
+    
+     <intercept-url pattern="/" access="permitAll" />
+   
+   
+
+    <intercept-url pattern="/job/*" access="hasRole('Admin')" />
+    <intercept-url pattern="/employee/**" access="permitAll" />
+    <intercept-url pattern="/client/**" access="permitAll" />
+    <intercept-url pattern="/resources/**" access="permitAll" />
+    <intercept-url pattern="/js/**" access="permitAll" />
+    <intercept-url pattern="/css/**" access="permitAll" />
+    <intercept-url pattern="/images/**" access="permitAll" />
+    <intercept-url pattern="/TableFilter/*" access="permitAll" />
+     <intercept-url pattern="/favicon.ico" access="permitAll" />
+     <intercept-url pattern="/security/**" access="permitAll" />
+    <intercept-url pattern="/**" access="denyAll" />
+       
+           
+    <!-- <intercept-url pattern="/open/**" access="permitAll" />
+     <intercept-url pattern="/favicon.ico" access="permitAll" />
+    <intercept-url pattern="/logout" access="permitAll" />
+    <intercept-url pattern="/login" access="permitAll" />
+    <intercept-url pattern="/denied" access="permitAll" />
+    <intercept-url pattern="/loginfailed" access="permitAll" />
+    
+    <intercept-url pattern="/js/**" access="permitAll" />
+    <intercept-url pattern="/css/**" access="permitAll" />
+    <intercept-url pattern="/images/**" access="permitAll" />
+    <intercept-url pattern="/TableFilter/*" access="permitAll" />
+        
+    <intercept-url pattern="/**" access="denyAll" /> -->
+  
+
+    <access-denied-handler error-page="/security/denied" />
+     <form-login login-page="/security/login" authentication-failure-url="/security/loginfailed" />
+      <logout logout-success-url="/security/logout" />
+    
+        
+  
+</http>
+
+    <authentication-manager>
+	   <authentication-provider>
+		<jdbc-user-service data-source-ref="dataSourceSecurity"
+ 
+		 
+		  users-by-username-query="Select employee_username,employee_password, 
+									CASE  
+									WHEN employee_end_date is null THEN true
+									ELSE false
+									END 
+									from employee where employee_username=?"
+		
+
+		   authorities-by-username-query="select e.employee_username, p.permission_name
+										from employee e, employee_permission ep, permission p 
+										where e.employee_id = ep.employee_id and ep.permission_id = p.permission_id and p.permission_enable = true and e.employee_username=? "
+		
+		/>
+		<password-encoder ref="passwordEncoder"/>
+	   </authentication-provider>
+	</authentication-manager>
+	
+	<beans:bean class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" id="passwordEncoder"/>
+	
+</beans:beans>   
+
+

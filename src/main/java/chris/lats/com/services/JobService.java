@@ -111,13 +111,52 @@ public class JobService {
 											+"where dj.department_id = 2 AND ju.job_status_id = 3")
 			
 			
-		
+//		get departmentid after spring security is set
 			
 			.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
 			
 			return query.list();
 			
 		}
+	
+	@Transactional
+	public List<JobDepartmentUpdateDTO> getallJobsDepartment(){
+		Query query = dlp.createSQLQuery("SELECT jb.job_id as jobId, dj.department_job_id as departmentjobId, ju.job_update_id as jobupdateId " 
+										+"FROM job AS jb "
+										+"Join Department_Job AS dj "
+										+"ON jb.job_id = dj.job_id "
+										+"Join job_update as ju "
+										+"ON jb.job_id = ju.job_id "
+										+"where dj.department_id = 2 AND ju.job_status_id != 6 and ju.job_update_end is null")
+		
+		
+//	get departmentid after spring security is set
+		
+		.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
+		
+		return query.list();
+		
+	}
+	
+	
+	@Transactional
+	public List<JobDepartmentUpdateDTO> getclosedJobsDepartment(){
+		Query query = dlp.createSQLQuery("SELECT jb.job_id as jobId, dj.department_job_id as departmentjobId, ju.job_update_id as jobupdateId " 
+										+"FROM job AS jb "
+										+"Join Department_Job AS dj "
+										+"ON jb.job_id = dj.job_id "
+										+"Join job_update as ju "
+										+"ON jb.job_id = ju.job_id "
+										+"where dj.department_id = 2 AND ju.job_status_id = 6")
+		
+		
+//	get departmentid after spring security is set
+		
+		.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
+		
+		return query.list();
+		
+	}
 	
 
 }

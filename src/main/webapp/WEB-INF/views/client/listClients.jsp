@@ -34,6 +34,7 @@
 		
 		<thead>
 		<tr>
+		<th align = "center" class="center">Create Job</th>
 		<th align = "center" class="center">Id</th>
 		<th align = "center" class="center">Company Name</th>
 		<th align = "center" class="center">Vat No.</th>
@@ -44,6 +45,7 @@
 		<th align = "center" class="center">Edit Company Details</th>
 		<th align = "center" class="center">View Contacts</th>
 		<th align = "center" class="center">Change Status</th>
+
 	
 		</tr>
 		</thead>
@@ -53,10 +55,12 @@
 			<c:url var="onholdStatus" value="/client/onHoldClient?clientid=${clientslist.id}" />
 			<c:url var="activateStatus" value="/client/activateClient?clientid=${clientslist.id}" />
 			<c:url var="viewContacts" value="/client/listClientDetails?clientid=${clientslist.id}" />
+			<c:url var="createJob" value="/job/createJob?clientid=${clientslist.id}" />
 		
 		
 		
 		<tr>
+			<td align = "center" class="center"><a href="${createJob}"><img src="../resources/images/newjob.png" alt="Create Job" width="25px" height="25px" ></a></td>
 			<td align = "center" class="center"><c:out value="${clientslist.id}" /></td>	
 			<td align = "center" class="center"><c:out value="${clientslist.clientName}" /></td>
 			<td align = "center" class="center"><c:out value="${clientslist.clientVat}" /></td>
@@ -92,15 +96,16 @@
 	
 	sort_config: { 
 		async_sort:true, 
-		sort_types:['Number', 'String', 'String', 'String', 'String', 'String', 'none', 'none','none']
+		sort_types:['none','Number', 'String', 'String', 'String', 'String', 'String', 'none', 'none','none']
 	},
 	paging: true,  
     paging_length: 100,
-    col_5:"select",
-    col_6:"none",
-	col_7:"none",
+    col_0:"none",
+    col_6:"select",
+   	col_7:"none",
 	col_8:"none",
-	col_width: ["20px","90px","100px","90px","100px","60px","50px","50px","50px"],
+	col_9:"none",
+	col_width: ["50px","20px","90px","100px","90px","100px","60px","50px","50px","50px"],
 	results_per_page: ['# rows per page',[10,100]], 
     rows_counter: true,  
     rows_counter_text: "Rows:",  
@@ -119,7 +124,7 @@
   
     //Grid layout properties  
     grid_layout: true,  
-    grid_width: '800px',  
+    grid_width: '850px',  
     grid_height: '400px',
       
     /*** Extensions manager ***/  

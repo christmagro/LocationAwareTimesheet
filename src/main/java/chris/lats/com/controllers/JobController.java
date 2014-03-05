@@ -1,9 +1,11 @@
 package chris.lats.com.controllers;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,7 @@ import chris.lats.com.services.LocalityService;
 import com.chris.LocationAwareTimesheet.model.Client;
 import com.chris.LocationAwareTimesheet.model.ClientDetails;
 import com.chris.LocationAwareTimesheet.model.DepartmentJob;
+import com.chris.LocationAwareTimesheet.model.Employee;
 import com.chris.LocationAwareTimesheet.model.Job;
 import com.chris.LocationAwareTimesheet.model.JobStatus;
 import com.chris.LocationAwareTimesheet.model.JobUpdate;
@@ -49,6 +52,7 @@ public class JobController {
 	@Autowired
 	LocalityService localityService;
 	
+			
 	
 	@RequestMapping(value = "/createJob", method = RequestMethod.GET)
 	public String getCreateJob(@RequestParam(value="clientid", required=true) int clientid, Model model) {
@@ -97,13 +101,15 @@ public class JobController {
 		   jobService.addJob(jobAppointment, clientdetailsid, jobDescription, jobRemarks, departmentid, 65);
 			
 		 
-		   return "redirect:createJob?clientid="+51;
+		   return "redirect:../client/listClients";
 		  
 	}
 	   
 	   
 	   @RequestMapping(value = "/listJobDepartmentUpdate", method = RequestMethod.GET)
 		public String getDepartmentNewJobsList(Model model) {
+		   
+//		   Once Spring security in place get employee id and department id
 		   	
 		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
 		   List<JobDepartmentUpdateDTO> jdus = jobService.getNewJobsDepartment();
@@ -118,6 +124,7 @@ public class JobController {
 			   ClientDetails clientdetails = job.getJobClientDetails();
 			   ClientDetails cd = clientdetailsService.get(clientdetails.getId());
 			   Locality locality = cd.getLocality();
+			   Client client = cd.getClient();
 			   
 			   
 			   loadjdu.setDepartmentjob(departmentjob);
@@ -126,7 +133,11 @@ public class JobController {
 			   loadjdu.setJobstatus(jobService.getJobStatus(jobstatus.getId()));
 			   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
 			   loadjdu.setLocality(localityService.getId(locality.getId()));
+			   loadjdu.setClient(clientService.get(client.getId()));
 			   jdulist.add(loadjdu);
+			   
+			   
+			   
 			   
 
 		   }
@@ -136,5 +147,94 @@ public class JobController {
 			
 		   return "job/listJobDeptNew";		 
 	   }
+	   
+	   
+	   @RequestMapping(value = "/listJobsDepartment", method = RequestMethod.GET)
+		public String getDepartmentAllJobsList(Model model, Principal principal) {
+		   
+//		   Once Spring security in place get employee id and department id
+		   	
+		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getallJobsDepartment();
+		   for( JobDepartmentUpdateDTO jdu : jdus){
+			   
+			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
+			   
+			   DepartmentJob departmentjob = jobService.getDepartmentJob(jdu.getDepartmentjobId());
+			   Job job = jobService.getJob(jdu.getJobId());
+			   JobUpdate jobupdate = jobService.getJobUpdate(jdu.getJobupdateId());
+			   JobStatus jobstatus = jobupdate.getJobStatus();
+			   ClientDetails clientdetails = job.getJobClientDetails();
+			   ClientDetails cd = clientdetailsService.get(clientdetails.getId());
+			   Locality locality = cd.getLocality();
+			   Client client = cd.getClient();
+			   
+			   
+			   loadjdu.setDepartmentjob(departmentjob);
+			   loadjdu.setJob(job);
+			   loadjdu.setJobupdate(jobupdate);
+			   loadjdu.setJobstatus(jobService.getJobStatus(jobstatus.getId()));
+			   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
+			   loadjdu.setLocality(localityService.getId(locality.getId()));
+			   loadjdu.setClient(clientService.get(client.getId()));
+			   jdulist.add(loadjdu);
+			   
+			   
+			   
+			   
+
+		   }
+		   model.addAttribute("jdulist", jdulist);
+		   
+		   
+		 
+			model.addAttribute("name", principal.getName());
+			
+		   return "job/listJobDeptAll";		 
+	   }
+	   
+	   
+	   @RequestMapping(value = "/listJobsDepartmentClosed", method = RequestMethod.GET)
+		public String getDepartmentClosedJobsList(Model model) {
+		   
+//		   Once Spring security in place get employee id and department id
+		   	
+		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getclosedJobsDepartment();
+		   for( JobDepartmentUpdateDTO jdu : jdus){
+			   
+			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
+			   
+			   DepartmentJob departmentjob = jobService.getDepartmentJob(jdu.getDepartmentjobId());
+			   Job job = jobService.getJob(jdu.getJobId());
+			   JobUpdate jobupdate = jobService.getJobUpdate(jdu.getJobupdateId());
+			   JobStatus jobstatus = jobupdate.getJobStatus();
+			   ClientDetails clientdetails = job.getJobClientDetails();
+			   ClientDetails cd = clientdetailsService.get(clientdetails.getId());
+			   Locality locality = cd.getLocality();
+			   Client client = cd.getClient();
+			   
+			   
+			   loadjdu.setDepartmentjob(departmentjob);
+			   loadjdu.setJob(job);
+			   loadjdu.setJobupdate(jobupdate);
+			   loadjdu.setJobstatus(jobService.getJobStatus(jobstatus.getId()));
+			   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
+			   loadjdu.setLocality(localityService.getId(locality.getId()));
+			   loadjdu.setClient(clientService.get(client.getId()));
+			   jdulist.add(loadjdu);
+			   
+			   
+			   
+			   
+
+		   }
+		   model.addAttribute("jdulist", jdulist);
+		   
+		   
+			
+		   return "job/listJobDeptClosed";		 
+	   }
+	   
 	   
 }
