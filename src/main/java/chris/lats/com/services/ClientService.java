@@ -17,6 +17,8 @@ public class ClientService {
 	@Autowired
 	DataLayerLatsdbImpl dlp;
 	
+	
+	
 	java.util.Date date= new java.util.Date();
 	
 	@Transactional

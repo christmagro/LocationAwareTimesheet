@@ -205,7 +205,7 @@ public class EmployeeController{
 				
 			  
 			  
-			   int empid = employeedepartmentService.getempldep(employeeid);
+			   int empid = employeedepartmentService.getempldepid(employeeid);
 			  
 			   EmployeeDepartment employeedepartment = employeedepartmentService.get(empid);
 			   Employee employee = employeeService.get(employeedepartment.getEmployee().getId());

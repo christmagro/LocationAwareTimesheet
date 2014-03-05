@@ -3,6 +3,7 @@ package chris.lats.com.dto;
 import com.chris.LocationAwareTimesheet.model.Client;
 import com.chris.LocationAwareTimesheet.model.ClientDetails;
 import com.chris.LocationAwareTimesheet.model.DepartmentJob;
+import com.chris.LocationAwareTimesheet.model.Departments;
 import com.chris.LocationAwareTimesheet.model.Job;
 import com.chris.LocationAwareTimesheet.model.JobStatus;
 import com.chris.LocationAwareTimesheet.model.JobUpdate;
@@ -18,6 +19,7 @@ public class JobDepartmentUpdate {
 	private ClientDetails clientdetails;
 	private Locality locality;
 	private Client client;
+	private Departments department;
 	
 	
 	public Job getJob() {
@@ -61,6 +63,12 @@ public class JobDepartmentUpdate {
 	}
 	public void setClient(Client client) {
 		this.client = client;
+	}
+	public Departments getDepartment() {
+		return department;
+	}
+	public void setDepartment(Departments department) {
+		this.department = department;
 	}
 	
 	

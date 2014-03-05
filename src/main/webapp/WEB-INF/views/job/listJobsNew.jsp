@@ -26,20 +26,21 @@
 <body>
 
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
-<h2>List of non closed Jobs for the ${department} department </h2>
+<h2>List of non closed Jobs for all departments </h2>
 
 
 	<table id="jobdepartmentupdateTable">
 		
 		<thead>
 		<tr>
-		<th  align = "center" class="center">Id</th>
+		<th align = "center" class="center">Id</th>
 		<th align = "center" class="center">Company</th>
 		<th align = "center" class="center">Address</th>
 		<th align = "center" class="center">Locality</th>
 		<th align = "center" class="center">Job Description</th>
 		<th align = "center" class="center">Job Remarks</th>
 		<th align = "center" class="center">Appointment Date</th>
+		<th align = "center" class="center">Department</th>
 		<th align = "center" class="center">Job Status</th>
 		
 	
@@ -48,7 +49,7 @@
 		</thead>
 		<tbody>
 	<c:forEach items="${jdulist}" var="jdulist">
-			<c:url var="allocateJob" value="/job/allocateJob?jobid=${jdulist.job.id}" />
+			
 		
 		
 		
@@ -62,6 +63,7 @@
 			<td align = "center" class="center"><c:out value="${jdulist.job.jobDescription}" /></td>
 			<td align = "center" class="center"><c:out value="${jdulist.job.jobRemarks}" /></td>
 			<td align = "center" class="center"><joda:format value="${jdulist.job.jobAppointmentDatetime}" pattern="dd/MM/yyyy HH:mm"/></td>
+			<td align = "center" class="center"><c:out value="${jdulist.department.departmentName}" /></td>
 			<td align = "center" class="center"><c:out value="${jdulist.jobstatus.jobStatusName}" /></td>
 			
 			
@@ -80,13 +82,14 @@
 	
 	sort_config: { 
 		async_sort:true, 
-		sort_types:['Number', 'String', 'String', 'String', 'String','dmy','String', 'none']
+		sort_types:['Number', 'String', 'String', 'String','String','dmy','String', 'String','none']
 	},
 	paging: true,  
     paging_length: 100,
     col_7:"Select",
-    col_8:"none",
-   	col_width: ["20px","50px","50px","30px","70px","70px","40px","30px","30px"],
+    col_8:"Select",
+    col_resizer_table_layout: 'auto', 
+	col_width: ["20px","50px","50px","30px","70px","70px","40px","30px","30px","30px"],
 	results_per_page: ['# rows per page',[10,100]], 
     rows_counter: true,  
     rows_counter_text: "Rows:",  
@@ -98,17 +101,16 @@
     paging_length: 10,
 	on_keyup: true,  
     on_keyup_delay: 500,  
-    
+  	
     selectable: true,  
     editable: true,  
     
   
     //Grid layout properties  
     grid_layout: true,  
-    grid_width: '940px',  
-    grid_height: '450px',  
-  
-    grid_enable_cols_resizer: false, //disables columns resizing  
+    grid_width: '1100px',  
+    grid_height: '400px',
+      
     /*** Extensions manager ***/  
     
     btn_showHide_cols_text: 'Columns▼' 

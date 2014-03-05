@@ -26,7 +26,7 @@
 <body>
 
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
-<h2>List of non closed Jobs for Department ${name} </h2>
+<h2>List of non closed Jobs for the ${department} department </h2>
 
 
 	<table id="jobdepartmentupdateTable">

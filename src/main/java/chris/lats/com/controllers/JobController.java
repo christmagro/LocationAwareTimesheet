@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import chris.lats.com.dto.ClientDetailsDTO;
+import chris.lats.com.dto.EmployeeDepartmentDTO;
 import chris.lats.com.dto.JobDepartmentUpdate;
 import chris.lats.com.dto.JobDepartmentUpdateDTO;
 import chris.lats.com.services.ClientDetailsService;
 import chris.lats.com.services.ClientService;
 import chris.lats.com.services.DepartmentService;
+import chris.lats.com.services.EmployeeDepartmentService;
 import chris.lats.com.services.EmployeeService;
 import chris.lats.com.services.JobService;
 import chris.lats.com.services.LocalityService;
@@ -25,8 +26,11 @@ import chris.lats.com.services.LocalityService;
 import com.chris.LocationAwareTimesheet.model.Client;
 import com.chris.LocationAwareTimesheet.model.ClientDetails;
 import com.chris.LocationAwareTimesheet.model.DepartmentJob;
+import com.chris.LocationAwareTimesheet.model.Departments;
 import com.chris.LocationAwareTimesheet.model.Employee;
+import com.chris.LocationAwareTimesheet.model.EmployeeDepartment;
 import com.chris.LocationAwareTimesheet.model.Job;
+import com.chris.LocationAwareTimesheet.model.JobAllocation;
 import com.chris.LocationAwareTimesheet.model.JobStatus;
 import com.chris.LocationAwareTimesheet.model.JobUpdate;
 import com.chris.LocationAwareTimesheet.model.Locality;
@@ -51,6 +55,8 @@ public class JobController {
 	
 	@Autowired
 	LocalityService localityService;
+	@Autowired
+	EmployeeDepartmentService employeedepartmentService;
 	
 			
 	
@@ -88,7 +94,7 @@ public class JobController {
 
 	  	    	
 	   @RequestMapping(value = "/createJob", method = RequestMethod.POST)
-	  public String postCreateJob(@RequestParam(value="jobAppointment", required=true) String jobAppointment,
+	  public String postCreateJob(@RequestParam(value="jobAppointment", required=true) String jobAppointment, Principal principal,
 			  					 @RequestParam(value="clientdetailsid", required=true) int clientdetailsid,
 			  					 @RequestParam(value="jobDescription", required=true) String jobDescription,
 			  					 @RequestParam(value="jobRemarks", required=true) String jobRemarks,
@@ -96,9 +102,9 @@ public class JobController {
 			  					 
 			  					
 			  					  {
+		   Employee employee =  employeeService.getEmployee(principal.getName());
 		   
-		   
-		   jobService.addJob(jobAppointment, clientdetailsid, jobDescription, jobRemarks, departmentid, 65);
+		   jobService.addJob(jobAppointment, clientdetailsid, jobDescription, jobRemarks, departmentid, employee.getId());
 			
 		 
 		   return "redirect:../client/listClients";
@@ -107,12 +113,14 @@ public class JobController {
 	   
 	   
 	   @RequestMapping(value = "/listJobDepartmentUpdate", method = RequestMethod.GET)
-		public String getDepartmentNewJobsList(Model model) {
+		public String getDepartmentNewJobsList(Model model, Principal principal) {
 		   
-//		   Once Spring security in place get employee id and department id
+		   Employee employee =  employeeService.getEmployee(principal.getName());
+			EmployeeDepartment employeedepartment = employeedepartmentService.getempldept(employee.getId());
+			Departments department = employeedepartment.getDepartment();
 		   	
 		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
-		   List<JobDepartmentUpdateDTO> jdus = jobService.getNewJobsDepartment();
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getNewJobsDepartment(department.getId());
 		   for( JobDepartmentUpdateDTO jdu : jdus){
 			   
 			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
@@ -135,13 +143,12 @@ public class JobController {
 			   loadjdu.setLocality(localityService.getId(locality.getId()));
 			   loadjdu.setClient(clientService.get(client.getId()));
 			   jdulist.add(loadjdu);
-			   
-			   
-			   
-			   
-
-		   }
+			    }
+		   
+		  
+		   Departments dept = departmentService.get(department.getId());
 		   model.addAttribute("jdulist", jdulist);
+		   model.addAttribute("department", dept.getDepartmentName());
 		   
 		   
 			
@@ -152,10 +159,12 @@ public class JobController {
 	   @RequestMapping(value = "/listJobsDepartment", method = RequestMethod.GET)
 		public String getDepartmentAllJobsList(Model model, Principal principal) {
 		   
-//		   Once Spring security in place get employee id and department id
+		    Employee employee =  employeeService.getEmployee(principal.getName());
+			EmployeeDepartment employeedepartment = employeedepartmentService.getempldept(employee.getId());
+			Departments department = employeedepartment.getDepartment();
 		   	
 		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
-		   List<JobDepartmentUpdateDTO> jdus = jobService.getallJobsDepartment();
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getallJobsDepartment(department.getId());
 		   for( JobDepartmentUpdateDTO jdu : jdus){
 			   
 			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
@@ -178,29 +187,26 @@ public class JobController {
 			   loadjdu.setLocality(localityService.getId(locality.getId()));
 			   loadjdu.setClient(clientService.get(client.getId()));
 			   jdulist.add(loadjdu);
-			   
-			   
-			   
-			   
+			 }
+		  
 
-		   }
+		   Departments dept = departmentService.get(department.getId());
 		   model.addAttribute("jdulist", jdulist);
+		   model.addAttribute("department", dept.getDepartmentName());
 		   
-		   
-		 
-			model.addAttribute("name", principal.getName());
-			
-		   return "job/listJobDeptAll";		 
+		 return "job/listJobDeptAll";		 
 	   }
 	   
 	   
 	   @RequestMapping(value = "/listJobsDepartmentClosed", method = RequestMethod.GET)
-		public String getDepartmentClosedJobsList(Model model) {
+		public String getDepartmentClosedJobsList(Model model, Principal principal) {
 		   
-//		   Once Spring security in place get employee id and department id
+		   Employee employee =  employeeService.getEmployee(principal.getName());
+			EmployeeDepartment employeedepartment = employeedepartmentService.getempldept(employee.getId());
+			Departments department = employeedepartment.getDepartment();
 		   	
 		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
-		   List<JobDepartmentUpdateDTO> jdus = jobService.getclosedJobsDepartment();
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getclosedJobsDepartment(department.getId());
 		   for( JobDepartmentUpdateDTO jdu : jdus){
 			   
 			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
@@ -223,18 +229,183 @@ public class JobController {
 			   loadjdu.setLocality(localityService.getId(locality.getId()));
 			   loadjdu.setClient(clientService.get(client.getId()));
 			   jdulist.add(loadjdu);
+		 }
+		  
+		   
+		   Departments dept = departmentService.get(department.getId());
+		   model.addAttribute("jdulist", jdulist);
+		   model.addAttribute("department", dept.getDepartmentName());
+			
+		   return "job/listJobDeptClosed";		 
+	   }
+	   
+	   
+	   
+	   
+	   @RequestMapping(value = "/listJobsNew", method = RequestMethod.GET)
+		public String getNewJobsList(Model model) {
+		   
+		   
+		   	
+		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getNewJobs();
+		   for( JobDepartmentUpdateDTO jdu : jdus){
+			   
+			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
+			   
+			   DepartmentJob departmentjob = jobService.getDepartmentJob(jdu.getDepartmentjobId());
+			   Job job = jobService.getJob(jdu.getJobId());
+			   JobUpdate jobupdate = jobService.getJobUpdate(jdu.getJobupdateId());
+			   JobStatus jobstatus = jobupdate.getJobStatus();
+			   ClientDetails clientdetails = job.getJobClientDetails();
+			   ClientDetails cd = clientdetailsService.get(clientdetails.getId());
+			   Locality locality = cd.getLocality();
+			   Client client = cd.getClient();
+			   Departments department = departmentjob.getDepartment();
 			   
 			   
-			   
-			   
-
-		   }
+			   loadjdu.setDepartmentjob(departmentjob);
+			   loadjdu.setJob(job);
+			   loadjdu.setJobupdate(jobupdate);
+			   loadjdu.setJobstatus(jobService.getJobStatus(jobstatus.getId()));
+			   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
+			   loadjdu.setLocality(localityService.getId(locality.getId()));
+			   loadjdu.setClient(clientService.get(client.getId()));
+			   loadjdu.setDepartment(departmentService.get(department.getId()));
+			   jdulist.add(loadjdu);
+			    }
 		   model.addAttribute("jdulist", jdulist);
 		   
 		   
 			
-		   return "job/listJobDeptClosed";		 
+		   return "job/listJobsNew";		 
 	   }
+	   
+	   
+	   
+	   @RequestMapping(value = "/listJobs", method = RequestMethod.GET)
+		public String getAllJobsList(Model model) {
+		
+		   	
+		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getallJobs();
+		   for( JobDepartmentUpdateDTO jdu : jdus){
+			   
+			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
+			   
+			   DepartmentJob departmentjob = jobService.getDepartmentJob(jdu.getDepartmentjobId());
+			   Job job = jobService.getJob(jdu.getJobId());
+			   JobUpdate jobupdate = jobService.getJobUpdate(jdu.getJobupdateId());
+			   JobStatus jobstatus = jobupdate.getJobStatus();
+			   ClientDetails clientdetails = job.getJobClientDetails();
+			   ClientDetails cd = clientdetailsService.get(clientdetails.getId());
+			   Locality locality = cd.getLocality();
+			   Client client = cd.getClient();
+			   Departments department = departmentjob.getDepartment();
+			   
+			   
+			   loadjdu.setDepartmentjob(departmentjob);
+			   loadjdu.setJob(job);
+			   loadjdu.setJobupdate(jobupdate);
+			   loadjdu.setJobstatus(jobService.getJobStatus(jobstatus.getId()));
+			   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
+			   loadjdu.setLocality(localityService.getId(locality.getId()));
+			   loadjdu.setClient(clientService.get(client.getId()));
+			   loadjdu.setDepartment(departmentService.get(department.getId()));
+			   jdulist.add(loadjdu);
+			 }
+		   model.addAttribute("jdulist", jdulist);
+		 
+		   return "job/listJobsAll";		 
+	   }
+	   
+	   
+	   @RequestMapping(value = "/listJobsClosed", method = RequestMethod.GET)
+		public String getClosedJobsList(Model model, Principal principal) {
+		 
+		   	
+		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getclosedJobs();
+		   for( JobDepartmentUpdateDTO jdu : jdus){
+			   
+			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
+			   
+			   DepartmentJob departmentjob = jobService.getDepartmentJob(jdu.getDepartmentjobId());
+			   Job job = jobService.getJob(jdu.getJobId());
+			   JobUpdate jobupdate = jobService.getJobUpdate(jdu.getJobupdateId());
+			   JobStatus jobstatus = jobupdate.getJobStatus();
+			   ClientDetails clientdetails = job.getJobClientDetails();
+			   ClientDetails cd = clientdetailsService.get(clientdetails.getId());
+			   Locality locality = cd.getLocality();
+			   Client client = cd.getClient();
+			   Departments department = departmentjob.getDepartment();
+			   
+			   
+			   loadjdu.setDepartmentjob(departmentjob);
+			   loadjdu.setJob(job);
+			   loadjdu.setJobupdate(jobupdate);
+			   loadjdu.setJobstatus(jobService.getJobStatus(jobstatus.getId()));
+			   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
+			   loadjdu.setLocality(localityService.getId(locality.getId()));
+			   loadjdu.setClient(clientService.get(client.getId()));
+			   loadjdu.setDepartment(departmentService.get(department.getId()));
+			   jdulist.add(loadjdu);
+		 }
+		   model.addAttribute("jdulist", jdulist);
+		   
+		   
+			
+		   return "job/listJobsClosed";		 
+	   }
+	   
+	   
+	   
+	   @RequestMapping(value = "/allocateJob", method = RequestMethod.GET)
+		public String getAllocateJob(@RequestParam(value="jobupdateid", required=true) int jobupdateid, Model model, Principal principal) {
+		    
+		   Employee employee =  employeeService.getEmployee(principal.getName());
+			EmployeeDepartment employeedepartment = employeedepartmentService.getempldept(employee.getId());
+			Departments department = employeedepartment.getDepartment();
+		   
+		   
+		    List<EmployeeDepartment> employeedepartments = employeedepartmentService.getEmployeeDepartment(department.getId());
+		   	List<Employee> employeelist = new ArrayList<Employee>();
+			for(EmployeeDepartment ed : employeedepartments){
+				Employee emp = new Employee();
+				Employee loademployee = ed.getEmployee();
+				Employee loadedemployee = employeeService.get(loademployee.getId());
+				emp.setEmployeeName(loadedemployee.getEmployeeName());
+				emp.setEmployeeSurname(loadedemployee.getEmployeeSurname());
+				emp.setId(loadedemployee.getId());
+				
+				employeelist.add(emp);
+			}
+		
+			
+		   	model.addAttribute("jobupdateid", jobupdateid);
+			model.addAttribute("employeelist", employeelist);
+			model.addAttribute("allocateJob", new JobAllocation());
+			return "job/allocateJob";
+			}
+
+		  	    	
+		   @RequestMapping(value = "/allocateJob", method = RequestMethod.POST)
+		  public String postAllocateJob(@RequestParam(value="jobupdateid", required=true) int jobupdateid, Principal principal, 
+				  					 @RequestParam(value="employeeid", required=true) int employeeid)
+				  					  {
+			   
+			   
+			   Employee employee =  employeeService.getEmployee(principal.getName());
+			   JobUpdate jobupdate = jobService.getJobUpdate(jobupdateid);
+			   Job job = jobupdate.getJob();
+			  
+			   
+			   jobService.allocateJob(jobupdateid, job.getId(), employee.getId(), employeeid);
+				
+			 
+			   return "redirect:../job/listJobsDepartment";
+			  
+		}
 	   
 	   
 }

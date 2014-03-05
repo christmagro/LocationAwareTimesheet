@@ -24,7 +24,7 @@
 <body>
 
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
-<h2>List of New Jobs for Department XXX </h2>
+<h2>List of New Jobs for the ${department} department </h2>
 
 
 	<table id="jobdepartmentupdateTable">
@@ -46,7 +46,7 @@
 		</thead>
 		<tbody>
 	<c:forEach items="${jdulist}" var="jdulist">
-			<c:url var="allocateJob" value="/job/allocateJob?jobid=${jdulist.job.id}" />
+			<c:url var="allocateJob" value="/job/allocateJob?jobupdateid=${jdulist.jobupdate.id}" />
 		
 		
 		

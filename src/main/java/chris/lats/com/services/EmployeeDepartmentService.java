@@ -30,9 +30,21 @@ public class EmployeeDepartmentService {
 		
 		return employeedepartment;
 	}
+	
+	
+	
+	@Transactional
+	public List<EmployeeDepartment> getEmployeeDepartment( int deptid ) {
+		
+		Query query = dlp.createQuery("From EmployeeDepartment ed where ed.employeeDepartmentEndDate is null and  ed.department='" + deptid + "'");
+		
+		return query.list();
+	}
+	
+	
 		
 	@Transactional
-	public int getempldep(int eid) {
+	public int getempldepid(int eid) {
 				
 		// Create a Hibernate query (HQL)
 				
@@ -46,6 +58,20 @@ public class EmployeeDepartmentService {
 				return empdeptid;
 
 	}
+	
+	
+	@Transactional
+	public EmployeeDepartment getempldept(int eid) {
+				
+		// Create a Hibernate query (HQL)
+				
+	Query query = dlp.createQuery("From EmployeeDepartment ed where ed.employeeDepartmentEndDate is null and ed.employee= '" + eid + "'");
+		
+		          
+				return (EmployeeDepartment) query.list().get(0);
+
+	}
+	
 	
 	
 	@Transactional

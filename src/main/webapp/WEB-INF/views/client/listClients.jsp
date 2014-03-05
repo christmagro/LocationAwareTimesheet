@@ -60,7 +60,10 @@
 		
 		
 		<tr>
-			<td align = "center" class="center"><a href="${createJob}"><img src="../resources/images/newjob.png" alt="Create Job" width="25px" height="25px" ></a></td>
+			<td align = "center" class="center">
+			<c:if test="${clientslist.isClientOnhold()==false}"><a href="${createJob}"><img src="../resources/images/newjob.png" alt="Create Job" width="25px" height="25px" ></a></c:if>
+			<c:if test="${clientslist.isClientOnhold()==true}">N/A</c:if>
+			</td>
 			<td align = "center" class="center"><c:out value="${clientslist.id}" /></td>	
 			<td align = "center" class="center"><c:out value="${clientslist.clientName}" /></td>
 			<td align = "center" class="center"><c:out value="${clientslist.clientVat}" /></td>

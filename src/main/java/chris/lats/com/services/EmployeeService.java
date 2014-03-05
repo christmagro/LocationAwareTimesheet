@@ -9,12 +9,9 @@ import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.chris.LocationAwareTimesheet.model.Departments;
 import com.chris.LocationAwareTimesheet.model.EmpAddress;
 import com.chris.LocationAwareTimesheet.model.Employee;
 import com.chris.LocationAwareTimesheet.model.EmployeeDepartment;
-import com.chris.LocationAwareTimesheet.model.Locality;
 import com.chris.LocationAwareTimesheet.model.enums.db.EmployeeEmployeeGenderEnum;
 import com.chris.LocationAwareTimesheet.service.data.DataLayerLatsdbImpl;
 
@@ -26,6 +23,8 @@ public class EmployeeService {
 	@Autowired
 	DataLayerLatsdbImpl dlp;
 	
+	@Autowired
+	Md5Service md5Service;
 	
 
 		
@@ -37,6 +36,19 @@ public class EmployeeService {
 		Query query = dlp.createQuery("FROM  Employee e where e.employeeEndDate is null");
 		// Retrieve all
 		return  query.list();
+	}
+	
+	
+	@Transactional
+	public Employee getEmployee(String username) {
+				
+		// Create a Hibernate query (HQL)
+
+		Query query = dlp.createQuery("FROM  Employee e where  e.employeeUsername = '"+ username +"'");
+		Employee employee = (Employee) query.list().get(0);
+		
+		
+		return  employee;
 	}
 	
 	
@@ -80,6 +92,8 @@ public class EmployeeService {
     	String startConvert = estart;
     	DateTime startDate = fmt.parseDateTime(startConvert);
     	
+    	String md5password = Md5Service.hashPassword(password);
+    	
     	    	   	
     	employee.setEmployeeName(ename);
     	employee.setEmployeeSurname(esurname);
@@ -88,7 +102,7 @@ public class EmployeeService {
     	employee.setEmployeePhone(ephone);
     	employee.setEmployeeStartDate(startDate);
     	employee.setEmployeeUsername(username);
-    	employee.setEmployeePassword(password);
+    	employee.setEmployeePassword(md5password);
     	employee.setEmployeeEmail(email);
     			
 		// Save
