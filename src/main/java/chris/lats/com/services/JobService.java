@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import chris.lats.com.dto.JobDepartmentUpdate;
 import chris.lats.com.dto.JobDepartmentUpdateDTO;
+import chris.lats.com.dto.JobUpdateAllocationDTO;
+import chris.lats.com.json_model.JobList;
 
 import com.chris.LocationAwareTimesheet.model.DepartmentJob;
 import com.chris.LocationAwareTimesheet.model.Job;
@@ -229,6 +231,27 @@ public class JobService {
 		jobupdate.setJobUpdateStart((new DateTime(date.getTime())));
 		jobupdate.setEmployee(dlp.getEmployee(creatoremployeeid));
 		dlp.saveOrUpdate(jobupdate);
+		
+	}
+	
+	
+	@Transactional
+	public List<JobUpdateAllocationDTO> getImeiJobsDepartment(){
+		Query query = dlp.createSQLQuery("SELECT ju.job_id as jobId,  ju.job_update_id as jobupdateId, ja.job_allocation_id as joballocationId"
+										+" From Employee emp"
+										+" join employee_device ed"
+										+" on emp.employee_id = ed.employee_id"
+										+" join job_allocation ja"
+										+" on emp.employee_id = ja.employee_id"
+										+" join job_update ju"
+										+" on ju.job_id = ja.job_id"
+										+" join job_status js"
+										+" on ju.job_status_id = js.job_status_id"
+										+" where ed.employee_device_imei = '1234' and ed.employee_device_end_date is null and ju.job_update_end is null and (ju.job_status_id =  4 or ju.job_status_id =  5)")
+	
+										.setResultTransformer(Transformers.aliasToBean(JobUpdateAllocationDTO.class));
+		
+		return query.list();
 		
 	}
 	

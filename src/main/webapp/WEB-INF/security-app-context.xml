@@ -38,6 +38,7 @@
     <intercept-url pattern="/employee/**" access="permitAll" />
     <intercept-url pattern="/client/**" access="permitAll" />
     <intercept-url pattern="/resources/**" access="permitAll" />
+    <intercept-url pattern="/json/**" access="permitAll" />
     <intercept-url pattern="/js/**" access="permitAll" />
     <intercept-url pattern="/css/**" access="permitAll" />
     <intercept-url pattern="/images/**" access="permitAll" />
