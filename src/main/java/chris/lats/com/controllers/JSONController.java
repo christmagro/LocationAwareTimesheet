@@ -1,6 +1,7 @@
 package chris.lats.com.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -9,14 +10,18 @@ import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import chris.lats.com.dto.JobDepartmentUpdate;
 import chris.lats.com.dto.JobDepartmentUpdateDTO;
 import chris.lats.com.dto.JobUpdateAllocationDTO;
 import chris.lats.com.json_model.JobList;
+import chris.lats.com.json_model.JsonAppResponse;
+import chris.lats.com.json_model.TestClass;
 import chris.lats.com.services.ClientDetailsService;
 import chris.lats.com.services.ClientService;
 import chris.lats.com.services.DepartmentService;
@@ -31,6 +36,7 @@ import com.chris.LocationAwareTimesheet.model.DepartmentJob;
 import com.chris.LocationAwareTimesheet.model.Departments;
 import com.chris.LocationAwareTimesheet.model.Employee;
 import com.chris.LocationAwareTimesheet.model.Job;
+import com.chris.LocationAwareTimesheet.model.JobAllocation;
 import com.chris.LocationAwareTimesheet.model.JobStatus;
 import com.chris.LocationAwareTimesheet.model.JobUpdate;
 import com.chris.LocationAwareTimesheet.model.Locality;
@@ -59,7 +65,7 @@ public class JSONController {
 	@Autowired
 	EmployeeDepartmentService employeedepartmentService;
 	
-	@RequestMapping(value = "/listJobs", method = RequestMethod.GET)
+	@RequestMapping(value = "/listJobsold", method = RequestMethod.GET)
 	public @ResponseBody JobDepartmentUpdate  getAllJobsList(Model model) {
 	
 	   	
@@ -97,10 +103,10 @@ public class JSONController {
 	  	 
    }
 	
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public @ResponseBody List<JobList>  test(Model model) {
+	@RequestMapping(value = "/listJobs", method = RequestMethod.GET)
+	public @ResponseBody List<JobList>  listJobs(@RequestParam(value="imei", required=true) String imei, Model model) {
 		List<JobList> joblist = new ArrayList<JobList>();
-	   	List<JobUpdateAllocationDTO> juas = jobService.getImeiJobsDepartment();
+	   	List<JobUpdateAllocationDTO> juas = jobService.getImeiJobsDepartment(imei);
 	   	for(JobUpdateAllocationDTO jua:juas){
 	   		JobList jl = new JobList();
 	   		
@@ -109,6 +115,15 @@ public class JSONController {
 	    	
 	   		
 	   		Job job = jobService.getJob(jua.getJobId());
+	   		JobUpdate jobUpdate= jobService.getJobUpdate(jua.getJobupdateId());
+	   		
+	   		JobStatus jobUpdateStatus = jobUpdate.getJobStatus();
+	   		JobStatus jobStatus = jobService.getJobStatus(jobUpdateStatus.getId());
+	   		
+	   				
+	   		
+	   		jl.setJobDescription(job.getJobDescription());
+	   		jl.setJobRemarks(job.getJobRemarks());
 	   		ClientDetails clientdetailsload = job.getJobClientDetails();
 	   		ClientDetails clientdetails = clientdetailsService.get(clientdetailsload.getId());
 	   		Locality localityload = clientdetails.getLocality();
@@ -120,19 +135,59 @@ public class JSONController {
 	   		jl.setClientAddress(clientdetails.getClientDetailsAddress1()+", "+clientdetails.getClientDetailsAddress2()+", "+locality.getLocalityName());
 	   		jl.setClientName(client.getClientName());
 	   		jl.setJobid(job.getId());
+	   		jl.setJobStatus(jobStatus.getJobStatusName());
 	   		joblist.add(jl);
 	   		
-	   		System.out.println("test");
+	   		
 	   		
 	   	}
-//	   	Employee loadEmployee = new Employee();
-//	   	loadEmployee.setEmployeeName(employee.getEmployeeName());
+
 
 	return joblist;
 	
 	 
 	  	 
    }
+	
+	@RequestMapping(value = "/testpost", method = RequestMethod.POST)
+	 @ResponseBody
+	public void addComputer(@RequestBody TestClass testclass) {
+		
+		System.out.println("HelloWorld");
+		//System.out.println(testclass.getTest1());
+	
+	}
+	
+	 @RequestMapping(method=RequestMethod.POST, value="/testpost2")
+	   @ResponseBody
+	   public String  addCoordinates(@RequestBody JsonAppResponse jsonresponse) {
+		 
+		 Integer jobid = jsonresponse.getJobid();
+		 float latitude = jsonresponse.getLatitude();
+		 Float tmpLatitude = latitude;
+		 float longitude = jsonresponse.getLongitude();
+		 Float tmpLongitude = longitude;
+		 String status = jsonresponse.getStatus();
+		 String imei = jsonresponse.getImei();
+		 
+	 if((!jobid.equals(null))&&(!tmpLatitude.equals(null))&&(!tmpLongitude.equals(null))&&(!status.equals(null))&&(!imei.equals(null))){
+			 
+      		JobAllocation joballocation= jobService.getAllocationByJobid(jobid);
+      		
+      		 
+			if(status.equals("start")){
+				jobService.addCoordinatesStart(joballocation.getId(), jobid, latitude, longitude, imei, status);
+			}
+			else if(status.equals("pause")){
+				jobService.addCoordinatesPause(joballocation.getId(), jobid, latitude, longitude, imei, status);
+			}
+			else if(status.equals("stop")){
+				jobService.addCoordinatesFinish(joballocation.getId(), jobid, latitude, longitude, imei, status);
+			}
+		 }
+		 
+		return null;
+	   }
 
 
 }

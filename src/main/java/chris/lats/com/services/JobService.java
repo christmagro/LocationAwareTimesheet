@@ -1,11 +1,12 @@
 package chris.lats.com.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
+
 import org.hibernate.transform.Transformers;
-import org.hibernate.type.StandardBasicTypes;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -13,14 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import chris.lats.com.dto.JobDepartmentUpdate;
+
 import chris.lats.com.dto.JobDepartmentUpdateDTO;
 import chris.lats.com.dto.JobUpdateAllocationDTO;
-import chris.lats.com.json_model.JobList;
+
 
 import com.chris.LocationAwareTimesheet.model.DepartmentJob;
+import com.chris.LocationAwareTimesheet.model.Employee;
 import com.chris.LocationAwareTimesheet.model.Job;
 import com.chris.LocationAwareTimesheet.model.JobAllocation;
+import com.chris.LocationAwareTimesheet.model.JobCoordinates;
 import com.chris.LocationAwareTimesheet.model.JobStatus;
 import com.chris.LocationAwareTimesheet.model.JobUpdate;
 import com.chris.LocationAwareTimesheet.service.data.DataLayerLatsdbImpl;
@@ -208,8 +211,6 @@ public class JobService {
 	@Transactional
 	public void allocateJob(int jobupdateid, Integer jobid, Integer creatoremployeeid, int employeeid ){
 		
-	
-		
     	
 	    JobUpdate oldjobupdate = dlp.getJobUpdate(jobupdateid);
 	    oldjobupdate.setJobUpdateEnd((new DateTime(date.getTime())));
@@ -236,7 +237,7 @@ public class JobService {
 	
 	
 	@Transactional
-	public List<JobUpdateAllocationDTO> getImeiJobsDepartment(){
+	public List<JobUpdateAllocationDTO> getImeiJobsDepartment(String imei){
 		Query query = dlp.createSQLQuery("SELECT ju.job_id as jobId,  ju.job_update_id as jobupdateId, ja.job_allocation_id as joballocationId"
 										+" From Employee emp"
 										+" join employee_device ed"
@@ -247,13 +248,125 @@ public class JobService {
 										+" on ju.job_id = ja.job_id"
 										+" join job_status js"
 										+" on ju.job_status_id = js.job_status_id"
-										+" where ed.employee_device_imei = '1234' and ed.employee_device_end_date is null and ju.job_update_end is null and (ju.job_status_id =  4 or ju.job_status_id =  5)")
+										+" where ed.employee_device_imei = '"+imei+"' and ed.employee_device_end_date is null and ju.job_update_end is null and (ju.job_status_id =  4 or ju.job_status_id =  5)")
 	
 										.setResultTransformer(Transformers.aliasToBean(JobUpdateAllocationDTO.class));
 		
 		return query.list();
 		
 	}
+	
+	@Transactional
+	public JobAllocation getJobAllocation(int id){
+		
+		JobAllocation joballocation = dlp.getJobAllocation(id);
+	
+		return joballocation;
+	}
+	
+	@Transactional
+	public JobAllocation getAllocationByJobid(int jobid){
+		
+		
+		Query query = dlp.createQuery("From JobAllocation ja where ja.job = '"+jobid+"'");
+		JobAllocation joballocation =  (JobAllocation) query.list().get(0);
+	
+		return joballocation;
+	}
+	
+	@Transactional
+	public void addCoordinatesPause(int allocationid, int jobid, double latitude, double longitude, String imei, String status){
+		
+		
+		Query query = dlp.createQuery("From JobUpdate ju where ju.jobUpdateEnd is null AND ju.job = '"+jobid+"'");
+		JobUpdate jobUpdate =  (JobUpdate) query.list().get(0);
+		jobUpdate.setJobUpdateEnd(((new DateTime(date.getTime()))));
+		dlp.saveOrUpdate(jobUpdate);
+		
+		JobUpdate jobupdatenew = new JobUpdate();
+		JobAllocation joballocation = dlp.getJobAllocation(allocationid);
+		Employee employee = joballocation.getEmployee();
+		 
+		jobupdatenew.setJob(dlp.getJob(jobid));
+		jobupdatenew.setJobStatus(dlp.getJobStatus(5));
+		jobupdatenew.setEmployee(dlp.getEmployee(employee.getId()));
+		jobupdatenew.setJobUpdateStart(new DateTime(date.getTime()));
+		dlp.saveOrUpdate(jobupdatenew);
+		
+		JobCoordinates jobco = new JobCoordinates();
+		jobco.setJobAllocation(dlp.getJobAllocation(allocationid));
+		jobco.setJobCoordinatesImei(imei);
+		jobco.setJobCoordinatesLatitude(latitude);
+		jobco.setJobCoordinatesLongitude(longitude);
+		jobco.setJobCoordinatesRemarks(status);
+		jobco.setJobCoordinatesTimestamp(new DateTime(date.getTime()));
+		dlp.saveOrUpdate(jobco);
+		
+	}
+	
+	
+	@Transactional
+	public void addCoordinatesStart(int allocationid, int jobid, double latitude, double longitude, String imei, String status){
+		
+		Query query = dlp.createQuery("From JobUpdate ju where ju.jobUpdateEnd is null AND ju.job = '"+jobid+"'");
+		JobUpdate jobUpdate =  (JobUpdate) query.list().get(0);
+		jobUpdate.setJobUpdateEnd(((new DateTime(date.getTime()))));
+		dlp.saveOrUpdate(jobUpdate);
+		
+		JobUpdate jobupdatenew = new JobUpdate();
+		
+		JobAllocation joballocation = dlp.getJobAllocation(allocationid);
+		Employee employee = joballocation.getEmployee();
+		 
+		jobupdatenew.setJob(dlp.getJob(jobid));
+		jobupdatenew.setJobStatus(dlp.getJobStatus(8));
+		jobupdatenew.setEmployee(dlp.getEmployee(employee.getId()));
+		jobupdatenew.setJobUpdateStart(new DateTime(date.getTime()));
+		dlp.saveOrUpdate(jobupdatenew);
+		
+		JobCoordinates jobco = new JobCoordinates();
+		jobco.setJobAllocation(dlp.getJobAllocation(allocationid));
+		jobco.setJobCoordinatesImei(imei);
+		jobco.setJobCoordinatesLatitude(latitude);
+		jobco.setJobCoordinatesLongitude(longitude);
+		jobco.setJobCoordinatesRemarks(status);
+		jobco.setJobCoordinatesTimestamp(new DateTime(date.getTime()));
+		dlp.saveOrUpdate(jobco);
+		
+	}
+	
+	
+	@Transactional
+	public void addCoordinatesFinish(int allocationid, int jobid, double latitude, double longitude, String imei, String status){
+		
+		
+		Query query = dlp.createQuery("From JobUpdate ju where ju.jobUpdateEnd is null AND ju.job = '"+jobid+"'");
+		JobUpdate jobUpdate =  (JobUpdate) query.list().get(0);
+		jobUpdate.setJobUpdateEnd(((new DateTime(date.getTime()))));
+		dlp.saveOrUpdate(jobUpdate);
+		
+		JobUpdate jobupdatenew = new JobUpdate();
+		
+		JobAllocation joballocation = dlp.getJobAllocation(allocationid);
+		Employee employee = joballocation.getEmployee();
+		 
+		jobupdatenew.setJob(dlp.getJob(jobid));
+		jobupdatenew.setJobStatus(dlp.getJobStatus(6));
+		jobupdatenew.setEmployee(dlp.getEmployee(employee.getId()));
+		jobupdatenew.setJobUpdateStart(new DateTime(date.getTime()));
+		dlp.saveOrUpdate(jobupdatenew);
+		
+		JobCoordinates jobco = new JobCoordinates();
+		jobco.setJobAllocation(dlp.getJobAllocation(allocationid));
+		jobco.setJobCoordinatesImei(imei);
+		jobco.setJobCoordinatesLatitude(latitude);
+		jobco.setJobCoordinatesLongitude(longitude);
+		jobco.setJobCoordinatesRemarks(status);
+		jobco.setJobCoordinatesTimestamp(new DateTime(date.getTime()));
+		dlp.saveOrUpdate(jobco);
+		
+	}
+	
 	
 
 }

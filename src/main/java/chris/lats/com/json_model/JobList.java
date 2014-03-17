@@ -1,6 +1,6 @@
 package chris.lats.com.json_model;
 
-import org.joda.time.DateTime;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,6 +10,9 @@ public class JobList {
 	private String clientName;
 	private String clientAddress;
 	private String appointmentDate;
+	private String jobDescription;
+	private String jobRemarks;
+	private String jobStatus;
 	public int getJobid() {
 		return jobid;
 	}
@@ -33,6 +36,24 @@ public class JobList {
 	}
 	public void setAppointmentDate(String appointmentDate) {
 		this.appointmentDate = appointmentDate;
+	}
+	public String getJobDescription() {
+		return jobDescription;
+	}
+	public void setJobDescription(String jobDescription) {
+		this.jobDescription = jobDescription;
+	}
+	public String getJobRemarks() {
+		return jobRemarks;
+	}
+	public void setJobRemarks(String jobRemarks) {
+		this.jobRemarks = jobRemarks;
+	}
+	public String getJobStatus() {
+		return jobStatus;
+	}
+	public void setJobStatus(String jobStatus) {
+		this.jobStatus = jobStatus;
 	}
 	
 	
