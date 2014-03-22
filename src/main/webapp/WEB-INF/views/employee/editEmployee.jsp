@@ -8,20 +8,13 @@
 <html>
 <head>
 	<title>Create Employee</title>
-	<!-- Scripts -->
-		<script type="text/javascript" src="../resources/js/jquery-1.7.1.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery.dropotron-1.0.js"></script>
-		<script type="text/javascript" src="../resources/js/init.js"></script>
-		<script src="../resources/TableFilter/tablefilter_all.js" language="javascript" type="text/javascript"></script>
-		<script src="../resources/TableFilter/sortabletable.js" language="javascript" type="text/javascript"></script>
-		<script src="../resources/TableFilter/tfAdapter.sortabletable.js" language="javascript" type="text/javascript"></script>
-		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery-ui-1.8.js"></script>
-</head>
-<body>
+<jsp:include page="/resources/template/header.jsp" /> 
 
+<section class="introform">
+
+    <div class="container" align="center">
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
-<h2>Edit Employee</h2>
+ <h2>Edit employee details</h2>
 
 
 <c:url var="saveUrl" value="/employee/editEmployee?id=${editEmployee.id}" /> 
@@ -78,17 +71,27 @@
 	<input type="submit" value="Save" />
 </form:form>
 
-  <script>
-  $(document).ready(function() {
-    $("#employeeDob").datepicker({ dateFormat: 'dd/mm/yy' });
-  });
- </script>
-   <script>
-  $(document).ready(function() {
-    $("#employeeStartDate").datepicker({ dateFormat: 'dd/mm/yy' });
-  });
- </script>
+<script type="text/javascript">
+	$(function(){
+		$('*[name=employeeDob]').appendDtpicker({
+			"dateFormat": "DD/MM/YYYY",
+			"dateOnly": true,
+			"closeOnSelected":true
+		});
+			
+	});
+	</script>
+	<script type="text/javascript">
+	$(function(){
+		$('*[name=employeeStartDate]').appendDtpicker({
+			"dateFormat": "DD/MM/YYYY",
+			"dateOnly": true,
+			"closeOnSelected":true
+		});
+		});
+	</script>
 
 
-</body>
-</html>
+ </div>
+</section>
+<jsp:include page="/resources/template/footer.jsp" /> 

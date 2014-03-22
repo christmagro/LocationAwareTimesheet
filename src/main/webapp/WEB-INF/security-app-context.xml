@@ -47,20 +47,7 @@
      <intercept-url pattern="/security/**" access="permitAll" />
     <intercept-url pattern="/**" access="denyAll" />
        
-           
-    <!-- <intercept-url pattern="/open/**" access="permitAll" />
-     <intercept-url pattern="/favicon.ico" access="permitAll" />
-    <intercept-url pattern="/logout" access="permitAll" />
-    <intercept-url pattern="/login" access="permitAll" />
-    <intercept-url pattern="/denied" access="permitAll" />
-    <intercept-url pattern="/loginfailed" access="permitAll" />
-    
-    <intercept-url pattern="/js/**" access="permitAll" />
-    <intercept-url pattern="/css/**" access="permitAll" />
-    <intercept-url pattern="/images/**" access="permitAll" />
-    <intercept-url pattern="/TableFilter/*" access="permitAll" />
-        
-    <intercept-url pattern="/**" access="denyAll" /> -->
+   
   
 
     <access-denied-handler error-page="/security/denied" />

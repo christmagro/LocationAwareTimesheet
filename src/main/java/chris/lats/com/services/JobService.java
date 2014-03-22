@@ -367,6 +367,15 @@ public class JobService {
 		
 	}
 	
+	@Transactional
+	public List<JobCoordinates> getCoordinates(int allocationid){
+		
+		
+		Query query = dlp.createQuery("From JobCoordinates jc where jc.jobAllocation = '"+allocationid+"'");
+		
+		return query.list();
+		
 	
+	}
 
 }

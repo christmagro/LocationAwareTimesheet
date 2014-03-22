@@ -282,6 +282,7 @@ public class EmployeeController{
 			    		int empid = emp.getId(); 
 			    		int deptid = dept.getId();
 			    		dto.setId(employeemanager.getId());
+			    		dto.setEmployeeManagerStartDate(employeemanager.getEmployeeManagerStartDate());
 			    		dto.setEmployee(employeeService.get(empid));
 			    		dto.setDepartment(departmentService.get(deptid));
 
@@ -318,7 +319,7 @@ public class EmployeeController{
 					 int empdeptresult = employeemanagerService.checkAddEmployeeDepartment(employeeId, departmentId);
 					  if(deptresult > 0){
 						res.setStatus("FAIL");
-						res.setResult("Department already have a Manager");						 
+						res.setResult("Department already has a Manager");						 
 					  }
 					  
 					 

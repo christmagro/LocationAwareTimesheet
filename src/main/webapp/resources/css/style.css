@@ -1,0 +1,155 @@
+body { font-family: 'Lato', 'Arial', sans-serif; font-size: 15px; overflow-y: scroll;
+overflow-x: hidden;}
+h1, h2, h3, h4, h5 { font-weight: 400; font-family: 'Square Serif', Georgia, 'Times New Roman', Times, serif; }
+h1 { font-size: 24px; }
+h2 { font-size: 20px;}
+h3 { font-size: 18px; color: #fff; font-family: 'Lato', 'Arial', sans-serif; }
+.lato { font-family: 'Lato', 'Arial', sans-serif; }
+section { padding: 15px 0; }
+spacertop {padding-bottom:450px;}
+#error{color:red;}
+
+.service-logo, .screenshot { width: 100%;}  
+
+.smalltable {
+    background-color: lime;
+    padding: 12px;
+    border:2px solid #fff;border-collapse:separate;
+}
+
+/* Layout -------------------------------------------------- */
+section.header { padding: 900px 0 60px; background-size: cover; background-repeat: no-repeat; background-position: center center; } /* header sections require larger top padding for nav bar. */
+section.header a { text-decoration: none; }
+thead th{text-align:center}
+td{ word-wrap:break-word}
+
+.navbar { background: #005883; text-align: left; border-bottom: 1px solid #ccc;}
+.navbar a { font-size: 16px; color: #fff; }
+.navbar a:visited,  .navbar a:active,  .navbar a:link{ color: #fff; }
+.navbar-toggle .icon-bar { background: #fff; }
+.navbar-brand { background: url('../images/LATS_Logo.png') center center no-repeat; background-size: 202px 45px; width: 202px; height: 50px; margin-left: 15px; text-indent: -99999px; outline: none; }
+.navbar .navbar-nav > li > a[class^='ico'] { 
+    display: inline-block; 
+    float: left; 
+    font-size: 22px; 
+    -webkit-transition: color 0.2s;
+    -moz-transition: color 0.2s;
+    -ms-transition: color 0.2s;
+    -o-transition: color 0.2s;
+    transition: color 0.2s;
+}
+.navbar .navbar-nav > li > a.icon-facebook-circled:hover { color: #3a7ad7; background: none; }
+.navbar .navbar-nav > li > a.icon-twitter-circled:hover { color: #25a9df; background: none; }
+.navbar .navbar-nav > li > a.icon-tumblr-circled:hover { color: #61959d; background: none; }
+.navbar .navbar-nav > li > a.icon-flickr-circled:hover { color: #f151a4; background: none; }
+
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus { background: #317799; }
+.nav > li > a:hover, .nav > li > a:focus { background: #317799; }
+.nav .dropdown-menu { background: rgba(0,0,0,0.9); }
+.nav .dropdown-menu > li > a { padding: 5px 20px; }
+.nav .dropdown-menu > li > a:hover, .nav .dropdown-menu > li > a:focus { background: #333; color: #fff; }
+
+.ft { padding: 30px; background-color: #666; border-top: 1px solid #ccc; color: #ccc; }
+.ft ul { margin: 0; padding: 0 0 20px; }
+.ft li { padding: 3px 0; font-size: 13px; list-style: none;}
+.ft a { color: #fff; }
+.ft a:hover { color: #fff; text-decoration: none; }
+.ft .nav-header { color: #ccc;}
+.ft .address { font-size: 13px; line-height: 1.5em; }
+.ft .social li { height: 28px; line-height: 28px; }
+.ft .social li span[class^='icon-']:before { font-size: 16px; padding-right: 6px; position: relative; top: 3px; }
+
+.ft .copyright { font-size: 11px; color: #ccc; width: 100%; padding-top: 30px; }
+.ft .copyright span { display: inline-block; font-size: 11px;  }
+.ft .copyright p { display: inline-block; padding-right: 10px; font-size: 11px; }
+
+
+
+
+
+
+
+
+/* AOS */
+.aos .header { background-image: url('../images/maptagging.png'); text-align: center; color: #fff; height: 50px; }
+.aos .service-logo { margin-bottom: 30px; max-width: 598px;}
+.aos .intro { font-size: 20px; line-height: 1.5em; }
+
+.aos .feature { background: #005983; border-bottom: 1px solid #eee; color: #fff; }
+.aos .feature.even { background: #11304c; }
+.aos .feature img { width: 100%; } /* we can't use the .screenshot class it will fail the js */
+.aos .feature .shot1 { z-index: 3; position: relative; }
+.aos .feature .shot2 { z-index: 2; }
+.aos .feature .shot3 { z-index: 1; }
+
+.aos .branding { background: url('../img/aos/aos_brand_bg.jpg') no-repeat center center; background-size: cover; min-height: 570px; }
+.aos .branding .container .block { background: #333; background: rgba(0,0,0,0.85); color: #fff; padding: 30px; height: 100%; }
+.aos .branding .container .block p { margin: 20px 0; }
+
+.aos .improving { background: #11304c; color: #fff; }
+.aos .improving p { margin: 30px 0; }
+
+
+
+
+/* Error */
+.error404 { min-height: 250px; margin-bottom: -60px; background: url('../img/bg_404.png') bottom left no-repeat; }
+
+
+
+/* Responsive -------------------------------------------------- */
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    h1 { font-size: 32px; }
+    h2 { font-size: 26px; }
+    h3 { font-size: 20px; }
+    .navbar .navbar-nav > li > a[class^='ico'] { padding: 14px 3px; height: 50px;}
+
+    .aos .header, .sedna .header, .about .header { padding-top: 180px; }
+
+    /* Index */
+    .index .products .transition-left-chevron, .index .products .transition-right-chevron { display: inline-block; }
+    .index .products h2 { font-size: 48px; }
+    .index .products ul > li { line-height: 70px; height: 70px; }
+    .index .products ul > li > a, .index .products ul > li > a:hover, .index .products ul > li > a:active,
+    .index .products ul > li > a:visited, .index .products ul > li > a:link, .index .products ul > li > a:focus { font-size: 24px; }
+
+
+    /* AOS */
+    .aos .feature h2 { margin-top: 0; }
+    .aos .feature .screenshot-container { padding: 0; position: relative; } /* a rare case where padding needs to be removed from col so width of image are all same */
+    .aos .feature img { position: absolute; top: 0; right: 0;}
+    .aos .feature .block { margin-bottom: 1px; padding: 20px; background-color: #19688f; }
+    .aos .feature .block h3 { margin-top: 0; }
+    .aos .feature .block p:last-child { margin-bottom: 0; }
+    .aos .feature .block:hover { background-color: #1c719c; cursor: pointer; }
+    .aos .feature .block.selected { position:relative; background-color: #333; }
+    .aos .feature .block.selected:hover { cursor: default; }
+    .aos .feature .block.selected:before { position: absolute; left: -10px; top: 20px; content: ""; width: 0; height: 0; border-bottom: 10px solid transparent; border-top: 10px solid transparent; border-right: 10px solid #333; display: block; }
+
+  
+
+    /* Terms of Service */
+    .tos .tos-content { margin: 80px 0; padding: 40px; }
+    .tos .header h1 { font-size: 52px; }
+
+}
+
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    /* Index */
+    .index .customers .showcase > li[class^="logo-"] { float: left; display: inline-block; }
+
+    
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .aos .header, .sedna .header, .about .header { padding-top: 70px; }
+
+    /* AOS */
+    .aos .branding .container .block { margin-top: 30px; }
+
+    /* About */
+    .about .solution .bubble { min-height: 480px; }
+}

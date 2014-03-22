@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "social-icons";
+  src:url("../fonts/social-icons.eot");
+  src:url("../fonts/social-icons.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/social-icons.woff") format("woff"),
+    url("../fonts/social-icons.ttf") format("truetype"),
+    url("../fonts/social-icons.svg#social-icons") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+[data-icon]:before {
+  font-family: "social-icons" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: "social-icons" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-facebook-circled:before {
+  content: "b";
+}
+.icon-facebook:before {
+  content: "c";
+}
+.icon-flickr:before {
+  content: "e";
+}
+.icon-flickr-circled:before {
+  content: "f";
+}
+.icon-github:before {
+  content: "g";
+}
+.icon-github-circled:before {
+  content: "h";
+}
+.icon-gplus:before {
+  content: "i";
+}
+.icon-gplus-circled:before {
+  content: "j";
+}
+.icon-linkedin:before {
+  content: "l";
+}
+.icon-linkedin-circled:before {
+  content: "m";
+}
+.icon-skype:before {
+  content: "n";
+}
+.icon-skype-circled:before {
+  content: "o";
+}
+.icon-tumblr:before {
+  content: "p";
+}
+.icon-tumblr-circled:before {
+  content: "q";
+}
+.icon-twitter:before {
+  content: "r";
+}
+.icon-twitter-circled:before {
+  content: "s";
+}
+.icon-vimeo:before {
+  content: "t";
+}
+.icon-vimeo-circled:before {
+  content: "u";
+}

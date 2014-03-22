@@ -4,16 +4,26 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-    <title>Location Aware Timesheet System</title>
+	<title>Create Employee</title>
+	
+		<link rel="stylesheet" type="text/css" href="../resources/TableFilter/filtergrid.css">
+	<!-- Scripts -->
+		<script type="text/javascript" src="../resources/js/jquery-1.7.1.js"></script>
+		<script type="text/javascript" src="../resources/js/jquery.dropotron-1.0.js"></script>
+		<script type="text/javascript" src="../resources/js/init.js"></script>
+		<script type="text/javascript" src="../resources/TableFilter/tablefilter_all.js" ></script>
+		<script type="text/javascript" src="../resources/TableFilter/sortabletable.js"></script>
+		<script type="text/javascript" src="../resources/TableFilter/tfAdapter.sortabletable.js" ></script>
+		<script type="text/javascript" src="../resources/TableFilter/ezEditTable/ezEditTable.js" ></script>
+		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
+		<script type="text/javascript" src="../resources/js/jquery-ui-1.8.js"></script>
+</head>
+<body>
 
-<jsp:include page="/resources/template/header.jsp" /> 
-
-<section>
-    <div class="container" align="center">
-<%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
+ <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
 <h2>List of Employees</h2>
 
 <a href="addEmployee">Add Employee</a>
@@ -24,7 +34,7 @@
 		
 		<thead>
 		<tr>
-		<th align = "center" >Id</th>
+		<th align = "center" class="center">Id</th>
 		<th align = "center" class="center">Name</th>
 		<th align = "center" class="center">Surname</th>
 		<th align = "center" class="center">Date of Birth</th>
@@ -33,10 +43,10 @@
 		<th align = "center" class="center">Email</th>
 		<th align = "center" class="center">Start Date</th>
 		<th align = "center" class="center">Department</th>
-		<th align = "center" class="center">Edit</th>
-		<th align = "center" class="center">Addresses</th>
-		<th align = "center" class="center">Chg Dept</th>
-		<th align = "center" class="center">Permissions</th>
+		<th align = "center" class="center">Edit Employee</th>
+		<th align = "center" class="center">View Addresses</th>
+		<th align = "center" class="center">Change Department</th>
+		<th align = "center" class="center">View Permissions</th>
 	
 		</tr>
 		</thead>
@@ -85,7 +95,7 @@
 	col_10:"none",
 	col_11:"none",
 	col_12:"none",
-	col_width: ["20px","40px","40px","40px","20px","40px", "50px","40px","25px","20px","20px","20px","20px"],
+	col_width: ["20px","40px","50px","40px","20px","40px", "50px","40px","60px","30px","30px","30px","30px"],
 	results_per_page: ['# rows per page',[10,100]], 
     rows_counter: true,  
     rows_counter_text: "Rows:",  
@@ -97,12 +107,14 @@
     paging_length: 10,
 	on_keyup: true,  
     on_keyup_delay: 500,  
-  	selectable: true,  
+  	
+    selectable: true,  
     editable: true,  
-      
+    
+  
     //Grid layout properties  
     grid_layout: true,  
-    grid_width: '1015px',  
+    grid_width: '920px',  
     grid_height: '400px',
       
     /*** Extensions manager ***/  
@@ -115,8 +127,7 @@
 	var tf = setFilterGrid("employeeTable",props);
 //]]>
   </script>
-  
-    </div>
-</section>
 
-<jsp:include page="/resources/template/footer.jsp" /> 
+
+</body>
+</html>

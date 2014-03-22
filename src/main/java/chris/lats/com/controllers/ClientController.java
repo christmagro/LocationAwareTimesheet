@@ -34,6 +34,14 @@ public class ClientController {
 	ClientDetailsService clientdetailsService;
 	
 	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String home(Model model) {
+	
+		
+		return "home";
+		}
+	
+	
 	
 	@RequestMapping(value = "/addClient", method = RequestMethod.GET)
 	public String getAddClient(Model model) {
