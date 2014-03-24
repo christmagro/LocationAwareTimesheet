@@ -1,6 +1,6 @@
-package chris.lats.com.json_model;
+package chris.lats.com.dto;
 
-public class LongLat {
+public class ReportCoordinates {
 	float longitude;
 	float latitude;
 	public float getLongitude() {
@@ -15,6 +15,7 @@ public class LongLat {
 	public void setLatitude(float latitude) {
 		this.latitude = latitude;
 	}
+	
 	
 
 }

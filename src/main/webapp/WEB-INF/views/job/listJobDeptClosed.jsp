@@ -41,6 +41,7 @@
 		<th align = "center" class="center">Job Remarks</th>
 		<th align = "center" class="center">Appointment Date</th>
 		<th align = "center" class="center">Job Status</th>
+		<th align = "center" class="center">Map</th>
 		
 	
 	
@@ -48,7 +49,7 @@
 		</thead>
 		<tbody>
 	<c:forEach items="${jdulist}" var="jdulist">
-			<c:url var="allocateJob" value="/job/allocateJob?jobid=${jdulist.job.id}" />
+			<c:url var="viewMap" value="/json/mapcoordinates?jobid=${jdulist.job.id}" />
 		
 		
 		
@@ -63,6 +64,7 @@
 			<td align = "center" class="center"><c:out value="${jdulist.job.jobRemarks}" /></td>
 			<td align = "center" class="center"><joda:format value="${jdulist.job.jobAppointmentDatetime}" pattern="dd/MM/yyyy HH:mm"/></td>
 			<td align = "center" class="center"><c:out value="${jdulist.jobstatus.jobStatusName}" /></td>
+			<td align = "center" class="center"><a href="${viewMap}"><img src="../resources/images/map.ico" alt="View on Map" width="25px" height="25px" ></a></td>
 			
 			
 			

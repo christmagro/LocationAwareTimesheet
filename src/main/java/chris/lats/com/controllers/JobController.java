@@ -3,16 +3,13 @@ package chris.lats.com.controllers;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import chris.lats.com.dto.ClientDetailsDTO;
-import chris.lats.com.dto.EmployeeDepartmentDTO;
 import chris.lats.com.dto.JobDepartmentUpdate;
 import chris.lats.com.dto.JobDepartmentUpdateDTO;
 import chris.lats.com.services.ClientDetailsService;
@@ -22,7 +19,6 @@ import chris.lats.com.services.EmployeeDepartmentService;
 import chris.lats.com.services.EmployeeService;
 import chris.lats.com.services.JobService;
 import chris.lats.com.services.LocalityService;
-
 import com.chris.LocationAwareTimesheet.model.Client;
 import com.chris.LocationAwareTimesheet.model.ClientDetails;
 import com.chris.LocationAwareTimesheet.model.DepartmentJob;

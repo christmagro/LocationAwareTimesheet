@@ -147,8 +147,8 @@ public class JobService {
 										+"ON jb.job_id = dj.job_id "
 										+"Join job_update as ju "
 										+"ON jb.job_id = ju.job_id "
-										+"where dj.department_id = '"+deptid+"' AND ju.job_status_id = 6")
-	
+										+"where dj.department_id = '"+deptid+"' AND ju.job_status_id = 6 & ju.job_update_end is null")
+
 										.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
 		
 		return query.list();
@@ -198,7 +198,7 @@ public class JobService {
 									+"ON jb.job_id = dj.job_id "
 									+"Join job_update as ju "
 									+"ON jb.job_id = ju.job_id "
-									+"where ju.job_status_id = 6")
+									+"where ju.job_status_id = 6 & ju.job_update_end is null")
 
 									.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
 	
@@ -276,7 +276,7 @@ public class JobService {
 	
 	@Transactional
 	public void addCoordinatesPause(int allocationid, int jobid, double latitude, double longitude, String imei, String status){
-		
+		java.util.Date date= new java.util.Date();
 		
 		Query query = dlp.createQuery("From JobUpdate ju where ju.jobUpdateEnd is null AND ju.job = '"+jobid+"'");
 		JobUpdate jobUpdate =  (JobUpdate) query.list().get(0);
@@ -308,6 +308,8 @@ public class JobService {
 	@Transactional
 	public void addCoordinatesStart(int allocationid, int jobid, double latitude, double longitude, String imei, String status){
 		
+		java.util.Date date= new java.util.Date();
+		
 		Query query = dlp.createQuery("From JobUpdate ju where ju.jobUpdateEnd is null AND ju.job = '"+jobid+"'");
 		JobUpdate jobUpdate =  (JobUpdate) query.list().get(0);
 		jobUpdate.setJobUpdateEnd(((new DateTime(date.getTime()))));
@@ -338,7 +340,7 @@ public class JobService {
 	
 	@Transactional
 	public void addCoordinatesFinish(int allocationid, int jobid, double latitude, double longitude, String imei, String status){
-		
+		java.util.Date date= new java.util.Date();
 		
 		Query query = dlp.createQuery("From JobUpdate ju where ju.jobUpdateEnd is null AND ju.job = '"+jobid+"'");
 		JobUpdate jobUpdate =  (JobUpdate) query.list().get(0);
@@ -374,6 +376,29 @@ public class JobService {
 		Query query = dlp.createQuery("From JobCoordinates jc where jc.jobAllocation = '"+allocationid+"'");
 		
 		return query.list();
+		
+	
+	}
+	
+	
+	@Transactional
+	public List<JobAllocation> getAllocation(int jobid){
+		
+		
+		Query query = dlp.createQuery("From JobAllocation ju where ju.job = '"+jobid+"'");
+		
+		return query.list();
+		
+	
+	}
+	
+	@Transactional
+	public JobCoordinates getCoordinate(int id){
+		
+		
+		JobCoordinates jobCoordinates = dlp.getJobCoordinates(id);
+		
+		return jobCoordinates;
 		
 	
 	}
