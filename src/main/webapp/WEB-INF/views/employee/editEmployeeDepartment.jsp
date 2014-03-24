@@ -4,58 +4,53 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Change Employee Department</title>
-	<!-- Scripts -->
-		<script type="text/javascript" src="../resources/js/jquery-1.7.1.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery.dropotron-1.0.js"></script>
-		<script type="text/javascript" src="../resources/js/init.js"></script>
-		<script src="../resources/TableFilter/tablefilter_all.js" language="javascript" type="text/javascript"></script>
-		<script src="../resources/TableFilter/sortabletable.js" language="javascript" type="text/javascript"></script>
-		<script src="../resources/TableFilter/tfAdapter.sortabletable.js" language="javascript" type="text/javascript"></script>
-		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery-ui-1.8.js"></script>
-</head>
-<body>
+    <title>Location Aware Timesheet System</title>
 
+<jsp:include page="/resources/template/header.jsp" /> 
+
+<section>
+    <div class="container" align="center">
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
 <h2>Edit Employee Department</h2>
 
 
-<c:url var="saveUrl" value="/employee/editEmployeeDepartment?id=${employeedepartment.id}" /> 
+<c:url var="saveUrl" value="/employee/editEmployeeDepartment?id=${employeedepartment.id}" />
+	<table> 
 <form:form id="editEmployeeDepartment"  modelAttribute="employeedepartment"   method="POST" action="${saveUrl}">
-			
+		
 			<form:hidden path="" value="${employee.id}" id="employeeId" name="employeeId"/>
-			Employee Name: ${employee.employeeName} ${employee.employeeSurname}<br/>
-			
-			Employee Current Department: ${department.departmentName}<br/>
-			
-			Employee Current ID: ${department.id}<br/>
-			Select New Department <br/>       
+			<tr>
+			<td>Employee Name:</td> 
+			<td>${employee.employeeName} ${employee.employeeSurname}</td>
+			</tr>
+			<tr>
+			<td>Current Department:</td>
+			<td>${department.departmentName}</td>
+			</tr>
+			<tr>
+			<td>Employee Current ID:</td>
+			<td> ${department.id}</td>
+			</tr>
+			<td>
+			Select New Department  
+			</td>    
+			<td> 
             <form:select path="" id="departmentList" name="departmentList">
             <form:option value="" label="Select" />
             <form:options  items="${departmentList}" itemValue="Id" itemLabel="departmentName" />
-            </form:select><br/>
-        
-			
-	
-	
-	<input type="submit" value="Save" />
+            </form:select></td>
+        	<tr>
+			<td><input type="submit" value="Update Record" /></td>
+			</tr>
 </form:form>
-
-  <script>
-  $(document).ready(function() {
-    $("#employeeDob").datepicker({ dateFormat: 'dd/mm/yy' });
-  });
- </script>
-   <script>
-  $(document).ready(function() {
-    $("#employeeStartDate").datepicker({ dateFormat: 'dd/mm/yy' });
-  });
- </script>
+	</table>
 
 
-</body>
-</html>
+  </div>
+</section>
+
+<jsp:include page="/resources/template/footer.jsp" /> 
+

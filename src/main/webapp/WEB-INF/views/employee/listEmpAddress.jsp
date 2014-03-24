@@ -4,22 +4,15 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Create Employee</title>
-	<!-- Scripts -->
-		<script type="text/javascript" src="../resources/js/jquery-1.7.1.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery.dropotron-1.0.js"></script>
-		<script type="text/javascript" src="../resources/js/init.js"></script>
-		<script src="../resources/TableFilter/tablefilter_all.js" language="javascript" type="text/javascript"></script>
-		<script src="../resources/TableFilter/sortabletable.js" language="javascript" type="text/javascript"></script>
-		<script src="../resources/TableFilter/tfAdapter.sortabletable.js" language="javascript" type="text/javascript"></script>
-		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery-ui-1.8.js"></script>
-</head>
-<body>
+    <title>Location Aware Timesheet System</title>
 
+<jsp:include page="/resources/template/header.jsp" /> 
+
+<section>
+    <div class="container" align="center">
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
 <h2>Employee Details</h2>
 
@@ -27,17 +20,17 @@
 
 
 
-	<table>
+	<table id="employeeaddressTable">
+		
 		
 		<thead>
 		<tr>
-		<td>Id</td>
-		<td>Address 1</td>
-		<td>Address 2</td>
-		<td>Locality</td>
-		
-		<td>Edit Address</td>
-		<td>Remove Address</td>
+		<th align = "center" class="center">Id</th>
+		<th align = "center" class="center">Address 1</th>
+		<th align = "center" class="center">Address 2</th>
+		<th align = "center" class="center">Locality</th>
+		<th align = "center" class="center">Edit Address</th>
+		<th align = "center" class="center">Remove Address</th>
 	
 		</tr>
 		</thead>
@@ -49,23 +42,61 @@
 		
 		
 		<tr>
-			<td width=100px><c:out value="${empaddresslist.id}" /></td>	
-			<td width=100px><c:out value="${empaddresslist.empAddress1}" /></td>
-			<td width=100px><c:out value="${empaddresslist.empAddress2}" /></td>
-			<td width=70px><c:out value="${empaddresslist.locality.localityName}" /></td>
-				
-			<td width=90px><a href="${editAddress}">Edit Address</a></td>
-			<td width=90px><a href="${removeAddress}">Remove Address</a></td>
-		
-			 
-			
-		</tr>
+			<td align = "center" class="center"><c:out value="${empaddresslist.id}" /></td>	
+			<td align = "center" class="center"><c:out value="${empaddresslist.empAddress1}" /></td>
+			<td align = "center" class="center"><c:out value="${empaddresslist.empAddress2}" /></td>
+			<td align = "center" class="center"><c:out value="${empaddresslist.locality.localityName}" /></td>
+			<td align = "center" class="center"><a href="${editAddress}"><img src="../resources/images/edit.png" alt="Edit Employee Address" width="25px" height="25px" ></a></td>
+			<td align = "center" class="center"><a href="${removeAddress}"><img src="../resources/images/delete.png" alt="Remove Address" width="25px" height="25px" ></a></td>
+				</tr>
 	</c:forEach>
 	</tbody>
 		
 	</table>
+	<script language="JavaScript" type="text/javascript">
+//<![CDATA[	
+	var props = {
 	
+	sort_config: { 
+		async_sort:true, 
+		sort_types:['Number', 'String', 'String', 'String', 'none', 'none']
+	},
+	paging: true,  
+    paging_length: 100,
+	col_5:"none",
+	col_4:"none",
+	col_width: ["40px","80px","80px","70px", "60px","60px","1px"],
+	results_per_page: ['# rows per page',[10,100]], 
+    rows_counter: true,  
+    rows_counter_text: "Rows:",  
+    btn_reset: true,  
+    loader: true,  
+    loader_html: '<h5 style="color:black;">Loading, please wait...</h5>',  
+	alternate_rows: true,
+	paging: true,  
+    paging_length: 10,
+	on_keyup: true,  
+    on_keyup_delay: 500,  
+  	selectable: true,  
+    editable: true,  
+      
+    //Grid layout properties  
+    grid_layout: true,  
+    grid_width: '400px',  
+    grid_height: '100px',
+      
+    /*** Extensions manager ***/  
+    
+    btn_showHide_cols_text: 'Columns▼' 
+				
+	
+		
+	}
+	var tf = setFilterGrid("employeeaddressTable",props);
+//]]>
+  </script>
 
+  </div>
+</section>
 
-</body>
-</html>
+<jsp:include page="/resources/template/footer.jsp" /> 

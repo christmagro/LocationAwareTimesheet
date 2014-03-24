@@ -75,6 +75,8 @@ google.maps.event.addDomListener(window, 'load', loadmap);
 
     </script>
   </head>
+  
+  
   <body>
     <div id="map-canvas"></div>
     <div>

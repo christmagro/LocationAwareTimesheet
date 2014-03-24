@@ -4,6 +4,7 @@ import com.chris.LocationAwareTimesheet.model.Client;
 import com.chris.LocationAwareTimesheet.model.ClientDetails;
 import com.chris.LocationAwareTimesheet.model.DepartmentJob;
 import com.chris.LocationAwareTimesheet.model.Departments;
+import com.chris.LocationAwareTimesheet.model.Employee;
 import com.chris.LocationAwareTimesheet.model.Job;
 import com.chris.LocationAwareTimesheet.model.JobStatus;
 import com.chris.LocationAwareTimesheet.model.JobUpdate;
@@ -20,8 +21,15 @@ public class JobDepartmentUpdate {
 	private Locality locality;
 	private Client client;
 	private Departments department;
+	private Employee employee;
 	
 	
+	public Employee getEmployee() {
+		return employee;
+	}
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
 	public Job getJob() {
 		return job;
 	}

@@ -4,29 +4,19 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Create Employee</title>
-	
-		<link rel="stylesheet" type="text/css" href="../resources/TableFilter/filtergrid.css">
-	<!-- Scripts -->
-		<script type="text/javascript" src="../resources/js/jquery-1.7.1.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery.dropotron-1.0.js"></script>
-		<script type="text/javascript" src="../resources/js/init.js"></script>
-		<script type="text/javascript" src="../resources/TableFilter/tablefilter_all.js" ></script>
-		<script type="text/javascript" src="../resources/TableFilter/sortabletable.js"></script>
-		<script type="text/javascript" src="../resources/TableFilter/tfAdapter.sortabletable.js" ></script>
-		<script type="text/javascript" src="../resources/TableFilter/ezEditTable/ezEditTable.js" ></script>
-		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery-ui-1.8.js"></script>
-</head>
-<body>
+    <title>Location Aware Timesheet System</title>
 
+<jsp:include page="/resources/template/header.jsp" /> 
+
+<section>
+    <div class="container" align="center">
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
-<h2>Clients List</h2>
+<h2>Contact List for ${client.clientName} </h2>
 
-<a href="addClientDetails?clientid=${clientid}">Add Contact Details</a>
+<a href="addClientDetails?clientid=${client.id}">Add Contact Details for ${client.clientName}</a>
 
 
 
@@ -91,7 +81,7 @@
     paging_length: 10,
    	col_9:"none",
    	col_10:"none",
-		col_width: ["20px","70px","70px","100px","120px","90px","140px","100px","100px","50px","50px"],
+		col_width: ["40px","70px","70px","100px","120px","90px","140px","100px","100px","50px","50px"],
 	results_per_page: ['# rows per page',[10,100]], 
     rows_counter: true,  
     rows_counter_text: "Rows:",  
@@ -110,8 +100,8 @@
   
     //Grid layout properties  
     grid_layout: true,  
-    grid_width: '1010px',  
-    grid_height: '400px',
+    grid_width: '960px',  
+    grid_height: '250px',
       
     /*** Extensions manager ***/  
     
@@ -124,6 +114,7 @@
 //]]>
   </script>
 
+  </div>
+</section>
 
-</body>
-</html>
+<jsp:include page="/resources/template/footer.jsp" /> 

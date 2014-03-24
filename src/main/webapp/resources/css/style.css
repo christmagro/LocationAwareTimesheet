@@ -1,5 +1,12 @@
 body { font-family: 'Lato', 'Arial', sans-serif; font-size: 15px; overflow-y: scroll;
 overflow-x: hidden;}
+
+    html, body, #map-canvas {
+        height: 100%;
+        width: 100%;
+        margin: 0px;
+        padding: 0px
+      }
 h1, h2, h3, h4, h5 { font-weight: 400; font-family: 'Square Serif', Georgia, 'Times New Roman', Times, serif; }
 h1 { font-size: 24px; }
 h2 { font-size: 20px;}

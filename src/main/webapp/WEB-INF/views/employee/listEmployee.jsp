@@ -61,7 +61,7 @@
 			<td align = "center" class="center"><a href="${editEmployee}"><img src="../resources/images/edit.png" alt="Edit Employee Details" width="25px" height="25px" ></a></td>
 			<td align = "center" class="center"><a href="${viewAddresses}"><img src="../resources/images/address.png" alt="View Employee Addresses" width="25px" height="25px" ></a></td>
 			<td align = "center" class="center"><a href="${changeDept}"><img src="../resources/images/department.png" alt="Change Employee Department" width="25px" height="25px" ></a></td>
-			<td align = "center" class="center"><a href="${viewPermissions}"><img src="../resources/images/department.png" alt="Change Employee Department" width="25px" height="25px" ></a></td>
+			<td align = "center" class="center"><a href="${viewPermissions}"><img src="../resources/images/Permission.png" alt="View Permission" width="25px" height="25px" ></a></td>
 			 
 			
 		</tr>

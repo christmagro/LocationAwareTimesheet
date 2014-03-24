@@ -29,6 +29,7 @@
 		<th align = "center" class="center">Job Description</th>
 		<th align = "center" class="center">Job Remarks</th>
 		<th align = "center" class="center">Appointment Date</th>
+		<th align = "center" class="center">Assigned Employee</th>
 		<th align = "center" class="center">Job Status</th>
 		
 	
@@ -50,7 +51,12 @@
 			
 			<td align = "center" class="center"><c:out value="${jdulist.job.jobDescription}" /></td>
 			<td align = "center" class="center"><c:out value="${jdulist.job.jobRemarks}" /></td>
+			
 			<td align = "center" class="center"><joda:format value="${jdulist.job.jobAppointmentDatetime}" pattern="dd/MM/yyyy HH:mm"/></td>
+			<td align = "center" class="center">
+			<c:if test="${empty jdulist.employee}">N/A</c:if>
+			<c:if test="${not empty jdulist.employee}"><c:out value="${jdulist.employee.employeeName} ${jdulist.employee.employeeSurname}" /></c:if>
+			</td>
 			<td align = "center" class="center"><c:out value="${jdulist.jobstatus.jobStatusName}" /></td>
 			
 			
@@ -69,14 +75,13 @@
 	
 	sort_config: { 
 		async_sort:true, 
-		sort_types:['Number', 'String', 'String', 'String','String','dmy','String', 'none']
+		sort_types:['Number', 'String', 'String', 'String','String','String','String','dmy', 'none']
 	},
 	paging: true,  
     paging_length: 100,
-    col_7:"Select",
-    col_8:"none",
+    col_8:"Select",
     col_resizer_table_layout: 'auto', 
-	col_width: ["20px","50px","50px","30px","70px","70px","40px","30px","30px"],
+	col_width: ["20px","50px","50px","30px","70px","70px","50px","70px","30px"],
 	results_per_page: ['# rows per page',[10,100]], 
     rows_counter: true,  
     rows_counter_text: "Rows:",  
@@ -85,7 +90,7 @@
     loader_html: '<h5 style="color:black;">Loading, please wait...</h5>',  
 	alternate_rows: true,
 	paging: true,  
-    paging_length: 10,
+    paging_length: 100,
 	on_keyup: true,  
     on_keyup_delay: 500,  
   	
@@ -95,7 +100,7 @@
   
     //Grid layout properties  
     grid_layout: true,  
-    grid_width: '1135px',  
+    grid_width: '1150px',  
     grid_height: '400px',
       
     /*** Extensions manager ***/  

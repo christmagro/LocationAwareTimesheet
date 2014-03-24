@@ -4,24 +4,17 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Create New Client</title>
-	<!-- Scripts -->
-		<script type="text/javascript" src="../resources/js/jquery-1.7.1.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery.dropotron-1.0.js"></script>
-		<script type="text/javascript" src="../resources/js/init.js"></script>
-		<script src="../resources/TableFilter/tablefilter_all.js" language="javascript" type="text/javascript"></script>
-		<script src="../resources/TableFilter/sortabletable.js" language="javascript" type="text/javascript"></script>
-		<script src="../resources/TableFilter/tfAdapter.sortabletable.js" language="javascript" type="text/javascript"></script>
-		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery-ui-1.8.js"></script>
-</head>
-<body>
+    <title>Location Aware Timesheet System</title>
 
+<jsp:include page="/resources/template/header.jsp" /> 
+
+<section>
+    <div class="container" align="center">
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
-
+<h2>Edit contact for ${client.clientName} </h2>
 
 <c:url var="saveUrl" value="/client/editClientDetails?clientdetailsid=${editclientdetails.id}" /> 
 <form:form id="editclientdetails" modelAttribute="editclientdetails"  method="POST" action="${saveUrl}">
@@ -51,7 +44,7 @@
 		
 					
 		<tr>
-		 <td>Locality</td>
+		 <td><form:label path="">Locality</form:label></td>
         <td>
             <form:select path="" id="localityid" name="localityid">
             <form:option value="${locality.id}" label="${locality.localityName}" />
@@ -68,13 +61,19 @@
 			<td><form:label path="">Contact Email</form:label></td>
 			<td><form:input path="" value="${editclientdetails.clientDetailsContactEmail}" id="contactEmail" name="contactEmail"/></td>
 		</tr>  
+		
+		<tr>
+			<td></td>
+			<td><input type="submit" value="Save" /></td>
+		</tr>
 	
 	</table>
 	
-	<input type="submit" value="Save" />
+	
 </form:form>
 
 
+  </div>
+</section>
 
-</body>
-</html>
+<jsp:include page="/resources/template/footer.jsp" /> 

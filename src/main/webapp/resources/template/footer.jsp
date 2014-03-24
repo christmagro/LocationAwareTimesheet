@@ -11,8 +11,6 @@
         </div>
     </div>
 </footer>
-<!-- Add HTTPS to make jquery work locally -->
-
 
 </body>
 </html>

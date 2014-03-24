@@ -51,7 +51,7 @@
   
 
     <access-denied-handler error-page="/security/denied" />
-     <form-login login-page="/security/login" authentication-failure-url="/security/loginfailed" />
+     <form-login login-page="/security/login" default-target-url="/employee/listEmployees" authentication-failure-url="/security/loginfailed" />
       <logout logout-success-url="/security/logout" />
     
         

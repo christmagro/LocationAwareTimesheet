@@ -80,7 +80,7 @@ public class JobController {
 		}
 		
 		
-		
+		model.addAttribute("client", clientService.get(clientid));
 		model.addAttribute("clientdetailslist", clientdetailsDTO);
 		model.addAttribute("departmentlist", departmentService.getAll());
 		model.addAttribute("employeelist", employeeService.getAll());
@@ -175,6 +175,16 @@ public class JobController {
 			   Client client = cd.getClient();
 			   
 			   
+			   if(jobstatus.getId().equals(3)){
+				   loadjdu.setEmployee(null);
+			   }else{
+			  
+			   JobAllocation joballocation = jobService.getAllocationByJobid(job.getId());
+
+			   Employee employeeallocation = joballocation.getEmployee();
+			   loadjdu.setEmployee(employeeService.get(employeeallocation.getId()));
+			   }
+			   
 			   loadjdu.setDepartmentjob(departmentjob);
 			   loadjdu.setJob(job);
 			   loadjdu.setJobupdate(jobupdate);
@@ -182,7 +192,7 @@ public class JobController {
 			   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
 			   loadjdu.setLocality(localityService.getId(locality.getId()));
 			   loadjdu.setClient(clientService.get(client.getId()));
-			   jdulist.add(loadjdu);
+			    jdulist.add(loadjdu);
 			 }
 		  
 
@@ -299,6 +309,15 @@ public class JobController {
 			   Client client = cd.getClient();
 			   Departments department = departmentjob.getDepartment();
 			   
+			   if(jobstatus.getId().equals(3)){
+				   loadjdu.setEmployee(null);
+			   }else{
+			  
+			   JobAllocation joballocation = jobService.getAllocationByJobid(job.getId());
+
+			   Employee employeeallocation = joballocation.getEmployee();
+			   loadjdu.setEmployee(employeeService.get(employeeallocation.getId()));
+			   }
 			   
 			   loadjdu.setDepartmentjob(departmentjob);
 			   loadjdu.setJob(job);
@@ -308,6 +327,7 @@ public class JobController {
 			   loadjdu.setLocality(localityService.getId(locality.getId()));
 			   loadjdu.setClient(clientService.get(client.getId()));
 			   loadjdu.setDepartment(departmentService.get(department.getId()));
+
 			   jdulist.add(loadjdu);
 			 }
 		   model.addAttribute("jdulist", jdulist);

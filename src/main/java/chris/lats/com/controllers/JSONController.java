@@ -186,7 +186,7 @@ public class JSONController {
 			model.addAttribute("jobcoordinates", jobcoordinates);
 			model.addAttribute("jobid", jobid);
 			
-			return "home";
+			return "job/jobmap";
 			}
 		
 		long diff = 0;

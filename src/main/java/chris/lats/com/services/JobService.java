@@ -147,7 +147,7 @@ public class JobService {
 										+"ON jb.job_id = dj.job_id "
 										+"Join job_update as ju "
 										+"ON jb.job_id = ju.job_id "
-										+"where dj.department_id = '"+deptid+"' AND ju.job_status_id = 6 & ju.job_update_end is null")
+										+"where dj.department_id = '"+deptid+"' and ju.job_status_id = 6 and ju.job_update_end is null")
 
 										.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
 		
@@ -165,7 +165,7 @@ public class JobService {
 										+"ON jb.job_id = dj.job_id "
 										+"Join job_update as ju "
 										+"ON jb.job_id = ju.job_id "
-										+"where ju.job_status_id = 3")
+										+"where ju.job_status_id = 3 and ju.job_update_end is null")
 		
 		.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
 		
@@ -198,7 +198,7 @@ public class JobService {
 									+"ON jb.job_id = dj.job_id "
 									+"Join job_update as ju "
 									+"ON jb.job_id = ju.job_id "
-									+"where ju.job_status_id = 6 & ju.job_update_end is null")
+									+"where ju.job_status_id = 6 and ju.job_update_end is null")
 
 									.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
 	
@@ -267,7 +267,7 @@ public class JobService {
 	@Transactional
 	public JobAllocation getAllocationByJobid(int jobid){
 		
-		
+	
 		Query query = dlp.createQuery("From JobAllocation ja where ja.job = '"+jobid+"'");
 		JobAllocation joballocation =  (JobAllocation) query.list().get(0);
 	

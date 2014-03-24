@@ -769,8 +769,6 @@ public class EmployeeController{
 											Permission permission = employeepermission.getPermission();
 										    dto.setEmployee(employeeService.get(employee.getId()));
 											dto.setPermission(permissionService.get(permission.getId()));
-											
-										
 											dto.setId(employeepermission.getId());
 											employeepermissionDTO.add(dto);
 											
@@ -779,7 +777,8 @@ public class EmployeeController{
 									
 										   
 										model.addAttribute("employeepermissionlist", employeepermissionDTO);
-										model.addAttribute("employeeid", employeeid);
+										Employee employee = employeeService.get(employeeid);
+										model.addAttribute("employee", employee);
 										  		   
 														   
 										   return "employee/listEmployeePermissions";

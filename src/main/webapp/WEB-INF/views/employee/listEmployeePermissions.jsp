@@ -4,29 +4,20 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Create Employee</title>
-	
-		<link rel="stylesheet" type="text/css" href="../resources/TableFilter/filtergrid.css">
-	<!-- Scripts -->
-		<script type="text/javascript" src="../resources/js/jquery-1.7.1.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery.dropotron-1.0.js"></script>
-		<script type="text/javascript" src="../resources/js/init.js"></script>
-		<script type="text/javascript" src="../resources/TableFilter/tablefilter_all.js" ></script>
-		<script type="text/javascript" src="../resources/TableFilter/sortabletable.js"></script>
-		<script type="text/javascript" src="../resources/TableFilter/tfAdapter.sortabletable.js" ></script>
-		<script type="text/javascript" src="../resources/TableFilter/ezEditTable/ezEditTable.js" ></script>
-		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery-ui-1.8.js"></script>
-</head>
-<body>
+    <title>Location Aware Timesheet System</title>
+
+<jsp:include page="/resources/template/header.jsp" /> 
+
+<section>
+    <div class="container" align="center">
 
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
-<h2>List of Permissions</h2>
+<h2>List of Permissions for ${employee.employeeName} ${employee.employeeSurname} </h2>
 
-<a href="addEmployeePermission?employeeid=${employeeid}">Add Permission for User</a>
+<a href="addEmployeePermission?employeeid=${employee.id}">Add Permission for ${employee.employeeName} ${employee.employeeSurname}</a>
 
 
 
@@ -50,7 +41,7 @@
 		<tr>
 			<td align = "center" class="center"><c:out value="${employeepermissionlist.id}" /></td>	
 			<td align = "center" class="center"><c:out value="${employeepermissionlist.permission.permissionName}" /></td>
-			<td align = "center" class="center"><a href="${removeEmpPerm}"><img src="../resources/images/department.png" alt="Remove permission" width="25px" height="25px" ></a></td>
+			<td align = "center" class="center"><a href="${removeEmpPerm}"><img src="../resources/images/disable.png" alt="Remove permission" width="25px" height="25px" ></a></td>
 		</tr>
 	</c:forEach>
 	</tbody>
@@ -65,21 +56,19 @@
 		async_sort:true, 
 		sort_types:['Number', 'String', 'none', 'none', 'none']
 	},
-	paging: true,  
+	  
     paging_length: 100,
 	//col_4:"Select",
 	col_2:"none",
 	col_3:"none",
 	col_4:"none",
-	col_width: ["40px", "50px","30px","30px","50px"],
-	results_per_page: ['# rows per page',[10,100]], 
-    rows_counter: true,  
-    rows_counter_text: "Rows:",  
+	col_width: ["40px","100px","80px"],
+     
     btn_reset: true,  
     loader: true,  
     loader_html: '<h5 style="color:black;">Loading, please wait...</h5>',  
 	alternate_rows: true,
-	paging: true,  
+	
     paging_length: 10,
 	on_keyup: true,  
     on_keyup_delay: 500,  
@@ -88,8 +77,8 @@
       
     //Grid layout properties  
     grid_layout: true,  
-    grid_width: '400px',  
-    grid_height: '200px',
+    grid_width: '230px',  
+    grid_height: '100px',
       
     /*** Extensions manager ***/  
     
@@ -102,5 +91,7 @@
  </script>
 
 
-</body>
-</html>
+  </div>
+</section>
+
+<jsp:include page="/resources/template/footer.jsp" /> 

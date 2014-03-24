@@ -4,27 +4,15 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Create Employee</title>
-	
-		<link rel="stylesheet" type="text/css" href="../resources/TableFilter/filtergrid.css">
-		<link rel="stylesheet" type="text/css" href="../resources/TableFilter//TFExt_ColsResizer/TFExt_ColsResizer.css">
-	<!-- Scripts -->
-		<script type="text/javascript" src="../resources/js/jquery-1.7.1.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery.dropotron-1.0.js"></script>
-		<script type="text/javascript" src="../resources/js/init.js"></script>
-		<script type="text/javascript" src="../resources/TableFilter/tablefilter_all.js" ></script>
-		<script type="text/javascript" src="../resources/TableFilter/sortabletable.js"></script>
-		<script type="text/javascript" src="../resources/TableFilter/tfAdapter.sortabletable.js" ></script>
-		<script type="text/javascript" src="../resources/TableFilter/ezEditTable/ezEditTable.js" ></script>
-		<script type="text/javascript" src="../resources/TableFilter/TFExt_ColsResizer/TFExt_ColsResizer.js" ></script>
-		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
-		<script type="text/javascript" src="../resources/js/jquery-ui-1.8.js"></script>
-</head>
-<body>
+    <title>Location Aware Timesheet System</title>
 
+<jsp:include page="/resources/template/header.jsp" /> 
+
+<section>
+    <div class="container" align="center">
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
 <h2>List of non closed Jobs for the ${department} department </h2>
 
@@ -40,8 +28,8 @@
 		<th align = "center" class="center">Job Description</th>
 		<th align = "center" class="center">Job Remarks</th>
 		<th align = "center" class="center">Appointment Date</th>
-		<th align = "center" class="center">Job Status</th>
 		<th align = "center" class="center">Map</th>
+		<th align = "center" class="center">Print Timesheet</th>
 		
 	
 	
@@ -50,6 +38,7 @@
 		<tbody>
 	<c:forEach items="${jdulist}" var="jdulist">
 			<c:url var="viewMap" value="/json/mapcoordinates?jobid=${jdulist.job.id}" />
+			<c:url var="printTimeSheet" value="/json/TimeSheet?jobid=${jdulist.job.id}" />
 		
 		
 		
@@ -63,9 +52,9 @@
 			<td align = "center" class="center"><c:out value="${jdulist.job.jobDescription}" /></td>
 			<td align = "center" class="center"><c:out value="${jdulist.job.jobRemarks}" /></td>
 			<td align = "center" class="center"><joda:format value="${jdulist.job.jobAppointmentDatetime}" pattern="dd/MM/yyyy HH:mm"/></td>
-			<td align = "center" class="center"><c:out value="${jdulist.jobstatus.jobStatusName}" /></td>
+
 			<td align = "center" class="center"><a href="${viewMap}"><img src="../resources/images/map.ico" alt="View on Map" width="25px" height="25px" ></a></td>
-			
+			<td align = "center" class="center"><a href="${printTimeSheet}"><img src="../resources/images/printer.png" alt="Print Timesheet" width="25px" height="25px" ></a></td>
 			
 			
 			
@@ -82,13 +71,13 @@
 	
 	sort_config: { 
 		async_sort:true, 
-		sort_types:['Number', 'String', 'String', 'String', 'String','dmy','String', 'none']
+		sort_types:['Number', 'String', 'String', 'String', 'String','dmy', 'none','none']
 	},
 	paging: true,  
     paging_length: 100,
-    col_7:"Select",
+    col_7:"none",
     col_8:"none",
-   	col_width: ["20px","50px","50px","30px","70px","70px","40px","30px","30px"],
+   	col_width: ["20px","40px","40px","30px","70px","70px","40px","20px","20px"],
 	results_per_page: ['# rows per page',[10,100]], 
     rows_counter: true,  
     rows_counter_text: "Rows:",  
@@ -97,8 +86,7 @@
     loader_html: '<h5 style="color:black;">Loading, please wait...</h5>',  
 	alternate_rows: true,
 	paging: true,  
-    paging_length: 10,
-	on_keyup: true,  
+   	on_keyup: true,  
     on_keyup_delay: 500,  
     
     selectable: true,  
@@ -107,7 +95,7 @@
   
     //Grid layout properties  
     grid_layout: true,  
-    grid_width: '940px',  
+    grid_width: '1155px',  
     grid_height: '450px',  
   
     grid_enable_cols_resizer: false, //disables columns resizing  
@@ -122,6 +110,7 @@
 //]]>
   </script>
 
+  </div>
+</section>
 
-</body>
-</html>
+<jsp:include page="/resources/template/footer.jsp" /> 

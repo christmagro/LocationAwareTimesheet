@@ -129,9 +129,9 @@ public class ClientController {
 				}
 		   
 		   @RequestMapping(value = "/addClientDetails", method = RequestMethod.GET)
-			public String getAddClientDetails(@RequestParam(value="clientid", required=true) String clientid, Model model) {
+			public String getAddClientDetails(@RequestParam(value="clientid", required=true) int clientid, Model model) {
 			   
-			    model.addAttribute("clientid", clientid);
+			    model.addAttribute("client", clientService.get(clientid));
 				model.addAttribute("localitylist", localityService.getAll());
 				model.addAttribute("addclientdetails", new ClientDetails());
 				return "client/addClientDetails";
@@ -183,7 +183,8 @@ public class ClientController {
 				   
 				   
 				   
-					model.addAttribute("clientid", clientid);
+				   Client client = clientService.get(clientid);
+					model.addAttribute("client", client);
 					model.addAttribute("clientdetailsslist", clientdetailsDTO);
 					return "client/listClientDetails";
 					} 
@@ -195,9 +196,11 @@ public class ClientController {
 				   
 				   ClientDetails clientdetails = clientdetailsService.get(clientdetailsid);
 				   Locality locality = clientdetails.getLocality();
+				   Client client = clientdetails.getClient();
 				   
 				    model.addAttribute("locality", localityService.getId(locality.getId()));
 				  	model.addAttribute("localitylist", localityService.getAll());
+				  	model.addAttribute("client", clientService.get(client.getId()));
 					model.addAttribute("editclientdetails", clientdetails);
 					return "client/editClientDetails";
 					}
