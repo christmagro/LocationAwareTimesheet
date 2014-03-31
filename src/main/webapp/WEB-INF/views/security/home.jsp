@@ -14,23 +14,9 @@
 <section>
     <div class="container" align="center">
 
-	<c:if test="${not empty error}">
-		<div class="errorblock">
-			Your login attempt was not successful, try again.<br /> Caused :
-			${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
-		</div>
-	</c:if>
 
-<form name='f' action='/lats/j_spring_security_check' method="post">
- <table>
-    <tr><td>User:</td><td><input type='text'  maxlength="40" name='j_username' value=''></td></tr>
-    <tr><td>Password:</td><td><input type='password'  maxlength="40" name='j_password'/></td></tr>
-    <tr>
-    <td><input name="submit" type="submit" value="Login"/></td>
-    <td><a href="forgotPassword">Forgot Password</a></td>
-    </tr>
-  </table>
-</form>
+
+<h2>Welcome to the Location Aware Timesheet Systems</h2>
 
   </div>
 </section>

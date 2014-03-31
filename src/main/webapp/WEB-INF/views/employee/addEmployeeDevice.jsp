@@ -33,11 +33,11 @@
 		</tr> 
 		<tr>
 			<td><form:label path="employeeDeviceImei">Phone IMEI</form:label></td>
-			<td><form:input path="employeeDeviceImei"  id="imei" name="imei"/></td>
+			<td><form:input path="employeeDeviceImei" maxlength="40" id="imei" name="imei"/></td>
 		</tr>
 		<tr>
 			<td><form:label path="employeeDeviceModel">Phone Model</form:label></td>
-			<td><form:input path="employeeDeviceModel"  id="model" name="model"/></td>
+			<td><form:input path="employeeDeviceModel" maxlength="40" id="model" name="model"/></td>
 		</tr>
 		
 

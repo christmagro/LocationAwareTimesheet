@@ -37,6 +37,7 @@
 		<th align = "center" class="center">Addresses</th>
 		<th align = "center" class="center">Chg Dept</th>
 		<th align = "center" class="center">Permissions</th>
+		<th align = "center" class="center">Terminate</th>
 	
 		</tr>
 		</thead>
@@ -46,6 +47,7 @@
 			<c:url var="changeDept" value="/employee/editEmployeeDepartment?id=${employeelist.employee.id}" />
 			<c:url var="viewAddresses" value="/employee/listEmpAddresses?employeeid=${employeelist.employee.id}" />
 			<c:url var="viewPermissions" value="/employee/listEmployeePermissions?employeeid=${employeelist.employee.id}" />
+			<c:url var="terminate" value="/employee/terminateEmployee?employeeid=${employeelist.employee.id}" />
 		
 		
 		<tr>
@@ -62,7 +64,8 @@
 			<td align = "center" class="center"><a href="${viewAddresses}"><img src="../resources/images/address.png" alt="View Employee Addresses" width="25px" height="25px" ></a></td>
 			<td align = "center" class="center"><a href="${changeDept}"><img src="../resources/images/department.png" alt="Change Employee Department" width="25px" height="25px" ></a></td>
 			<td align = "center" class="center"><a href="${viewPermissions}"><img src="../resources/images/Permission.png" alt="View Permission" width="25px" height="25px" ></a></td>
-			 
+			<td align = "center" class="center"><a href="${terminate}"><img src="../resources/images/disable.png" alt="Terminiate Employee" width="25px" height="25px" ></a></td>
+			
 			
 		</tr>
 	</c:forEach>
@@ -76,7 +79,7 @@
 	
 	sort_config: { 
 		async_sort:true, 
-		sort_types:['Number', 'String', 'String', 'dmydate', 'String', 'Number', 'dmydate', 'String', 'String', 'none', 'none','none']
+		sort_types:['Number', 'String', 'String', 'dmydate', 'String', 'Number', 'dmydate', 'String', 'String', 'none', 'none','none','none']
 	},
 	paging: true,  
     paging_length: 100,
@@ -85,7 +88,8 @@
 	col_10:"none",
 	col_11:"none",
 	col_12:"none",
-	col_width: ["20px","40px","40px","40px","20px","40px", "50px","40px","25px","20px","20px","20px","20px"],
+	col_13:"none",
+	col_width: ["20px","40px","40px","40px","20px","40px", "50px","40px","25px","20px","20px","20px","20px","20px"],
 	results_per_page: ['# rows per page',[10,100]], 
     rows_counter: true,  
     rows_counter_text: "Rows:",  
@@ -102,7 +106,7 @@
       
     //Grid layout properties  
     grid_layout: true,  
-    grid_width: '1015px',  
+    grid_width: '1035px',  
     grid_height: '400px',
       
     /*** Extensions manager ***/  

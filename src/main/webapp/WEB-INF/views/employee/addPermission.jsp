@@ -35,7 +35,11 @@
 	
 	
 </form:form>
+ <script type="text/javascript">
+ var frmvalidator  = new Validator("addPermission");
+ frmvalidator.addValidation("permissionName","req","Please insert permission name");
 
+ </script> 
   </div>
 </section>
 

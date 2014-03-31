@@ -108,6 +108,50 @@ public class JobController {
 	}
 	   
 	   
+	   
+	   
+	   
+		@RequestMapping(value = "/editJob", method = RequestMethod.GET)
+		public String geteditJob(@RequestParam(value="jobid", required=true) int jobid, Model model) {
+			
+	
+			
+			Job job = jobService.getJob(jobid);
+			DepartmentJob departmentjob = jobService.getDepartmentJobbyJobid(jobid);
+			Departments department = departmentjob.getDepartment();
+			
+		
+			model.addAttribute("departmentlist", departmentService.getAll());
+			model.addAttribute("department", departmentService.get(department.getId()));
+			model.addAttribute("editjob", job);
+		
+			return "job/editJob";
+			}
+
+		  	    	
+		   @RequestMapping(value = "/editJob", method = RequestMethod.POST)
+		  public String postEditJob(@RequestParam(value="jobId", required=true) int jobId,
+				  					 @RequestParam(value="jobAppointment", required=true) String jobAppointment, Principal principal,
+				  					 @RequestParam(value="jobDescription", required=true) String jobDescription,
+				  					 @RequestParam(value="jobRemarks", required=true) String jobRemarks,
+				  					 @RequestParam(value="departmentid") int departmentid)
+				  					 
+				  					
+				  					  {
+			
+			   
+			   jobService.editJob(jobId, jobAppointment, jobDescription, jobRemarks, departmentid);
+				
+			 
+			   return "redirect:../job/listJobsNew";
+			  
+		}
+	   
+	   
+	   
+	   
+	   
+	   
 	   @RequestMapping(value = "/listJobDepartmentUpdate", method = RequestMethod.GET)
 		public String getDepartmentNewJobsList(Model model, Principal principal) {
 		   
@@ -149,6 +193,50 @@ public class JobController {
 		   
 			
 		   return "job/listJobDeptNew";		 
+	   }
+	   
+	   
+	   @RequestMapping(value = "/listJobsDepartmentInprogress", method = RequestMethod.GET)
+		public String getDepartmentinprogressJobsList(Model model, Principal principal) {
+		   
+		   Employee employee =  employeeService.getEmployee(principal.getName());
+			EmployeeDepartment employeedepartment = employeedepartmentService.getempldept(employee.getId());
+			Departments department = employeedepartment.getDepartment();
+		   	
+		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getinprogressJobsDepartment(department.getId());
+		   for( JobDepartmentUpdateDTO jdu : jdus){
+			   
+			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
+			   
+			   DepartmentJob departmentjob = jobService.getDepartmentJob(jdu.getDepartmentjobId());
+			   Job job = jobService.getJob(jdu.getJobId());
+			   JobUpdate jobupdate = jobService.getJobUpdate(jdu.getJobupdateId());
+			   JobStatus jobstatus = jobupdate.getJobStatus();
+			   ClientDetails clientdetails = job.getJobClientDetails();
+			   ClientDetails cd = clientdetailsService.get(clientdetails.getId());
+			   Locality locality = cd.getLocality();
+			   Client client = cd.getClient();
+			   
+			   
+			   loadjdu.setDepartmentjob(departmentjob);
+			   loadjdu.setJob(job);
+			   loadjdu.setJobupdate(jobupdate);
+			   loadjdu.setJobstatus(jobService.getJobStatus(jobstatus.getId()));
+			   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
+			   loadjdu.setLocality(localityService.getId(locality.getId()));
+			   loadjdu.setClient(clientService.get(client.getId()));
+			   jdulist.add(loadjdu);
+			    }
+		   
+		  
+		   Departments dept = departmentService.get(department.getId());
+		   model.addAttribute("jdulist", jdulist);
+		   model.addAttribute("department", dept.getDepartmentName());
+		   
+		   
+			
+		   return "job/listinprogressJobDept";		 
 	   }
 	   
 	   
@@ -204,15 +292,14 @@ public class JobController {
 	   }
 	   
 	   
-	   @RequestMapping(value = "/listJobsDepartmentClosed", method = RequestMethod.GET)
-		public String getDepartmentClosedJobsList(Model model, Principal principal) {
+	   @RequestMapping(value = "/listJobsEmployeeClosed", method = RequestMethod.GET)
+		public String getEmployeeClosedJobsList(Model model, Principal principal) {
 		   
 		   Employee employee =  employeeService.getEmployee(principal.getName());
-			EmployeeDepartment employeedepartment = employeedepartmentService.getempldept(employee.getId());
-			Departments department = employeedepartment.getDepartment();
+			
 		   	
 		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
-		   List<JobDepartmentUpdateDTO> jdus = jobService.getclosedJobsDepartment(department.getId());
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getemployeeclosedJobs(employee.getId());
 		   for( JobDepartmentUpdateDTO jdu : jdus){
 			   
 			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
@@ -225,6 +312,7 @@ public class JobController {
 			   ClientDetails cd = clientdetailsService.get(clientdetails.getId());
 			   Locality locality = cd.getLocality();
 			   Client client = cd.getClient();
+			   Departments department = departmentjob.getDepartment();
 			   
 			   
 			   loadjdu.setDepartmentjob(departmentjob);
@@ -234,16 +322,60 @@ public class JobController {
 			   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
 			   loadjdu.setLocality(localityService.getId(locality.getId()));
 			   loadjdu.setClient(clientService.get(client.getId()));
+			   loadjdu.setDepartment(departmentService.get(department.getId()));
 			   jdulist.add(loadjdu);
 		 }
 		  
 		   
-		   Departments dept = departmentService.get(department.getId());
+		  
 		   model.addAttribute("jdulist", jdulist);
-		   model.addAttribute("department", dept.getDepartmentName());
+		   model.addAttribute("employee", employee);
 			
-		   return "job/listJobDeptClosed";		 
+		   return "job/listJobEmployeeClosed";		 
 	   }
+	   
+	   
+	   
+	   @RequestMapping(value = "/listJobsDepartmentClosed", method = RequestMethod.GET)
+			public String getDepartmentClosedJobsList(Model model, Principal principal) {
+			   
+			   Employee employee =  employeeService.getEmployee(principal.getName());
+				EmployeeDepartment employeedepartment = employeedepartmentService.getempldept(employee.getId());
+				Departments department = employeedepartment.getDepartment();
+			   	
+			   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
+			   List<JobDepartmentUpdateDTO> jdus = jobService.getclosedJobsDepartment(department.getId());
+			   for( JobDepartmentUpdateDTO jdu : jdus){
+				   
+				   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
+				   
+				   DepartmentJob departmentjob = jobService.getDepartmentJob(jdu.getDepartmentjobId());
+				   Job job = jobService.getJob(jdu.getJobId());
+				   JobUpdate jobupdate = jobService.getJobUpdate(jdu.getJobupdateId());
+				   JobStatus jobstatus = jobupdate.getJobStatus();
+				   ClientDetails clientdetails = job.getJobClientDetails();
+				   ClientDetails cd = clientdetailsService.get(clientdetails.getId());
+				   Locality locality = cd.getLocality();
+				   Client client = cd.getClient();
+				   
+				   
+				   loadjdu.setDepartmentjob(departmentjob);
+				   loadjdu.setJob(job);
+				   loadjdu.setJobupdate(jobupdate);
+				   loadjdu.setJobstatus(jobService.getJobStatus(jobstatus.getId()));
+				   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
+				   loadjdu.setLocality(localityService.getId(locality.getId()));
+				   loadjdu.setClient(clientService.get(client.getId()));
+				   jdulist.add(loadjdu);
+			 }
+			  
+			   
+			   Departments dept = departmentService.get(department.getId());
+			   model.addAttribute("jdulist", jdulist);
+			   model.addAttribute("department", dept.getDepartmentName());
+				
+			   return "job/listJobDeptClosed";		 
+		   }
 	   
 	   
 	   
@@ -285,6 +417,52 @@ public class JobController {
 		   
 			
 		   return "job/listJobsNew";		 
+	   }
+	   
+	   
+	   
+	   @RequestMapping(value = "/listJobsInprogress", method = RequestMethod.GET)
+		public String getInprogressJobsList(Model model, Principal principal) {
+		   
+		   Employee employee =  employeeService.getEmployee(principal.getName());
+			EmployeeDepartment employeedepartment = employeedepartmentService.getempldept(employee.getId());
+			Departments department = employeedepartment.getDepartment();
+		   	
+		   List<JobDepartmentUpdate> jdulist = new ArrayList<JobDepartmentUpdate>();
+		   List<JobDepartmentUpdateDTO> jdus = jobService.getinprogressJobs();
+		   for( JobDepartmentUpdateDTO jdu : jdus){
+			   
+			   JobDepartmentUpdate loadjdu = new JobDepartmentUpdate();
+			   
+			   DepartmentJob departmentjob = jobService.getDepartmentJob(jdu.getDepartmentjobId());
+			   Job job = jobService.getJob(jdu.getJobId());
+			   JobUpdate jobupdate = jobService.getJobUpdate(jdu.getJobupdateId());
+			   JobStatus jobstatus = jobupdate.getJobStatus();
+			   ClientDetails clientdetails = job.getJobClientDetails();
+			   ClientDetails cd = clientdetailsService.get(clientdetails.getId());
+			   Locality locality = cd.getLocality();
+			   Client client = cd.getClient();
+			   
+			   
+			   loadjdu.setDepartmentjob(departmentjob);
+			   loadjdu.setJob(job);
+			   loadjdu.setJobupdate(jobupdate);
+			   loadjdu.setJobstatus(jobService.getJobStatus(jobstatus.getId()));
+			   loadjdu.setClientdetails(clientdetailsService.get(clientdetails.getId()));
+			   loadjdu.setLocality(localityService.getId(locality.getId()));
+			   loadjdu.setClient(clientService.get(client.getId()));
+			   loadjdu.setDepartment(departmentService.get(department.getId()));
+			   jdulist.add(loadjdu);
+			    }
+		   
+		  
+		   Departments dept = departmentService.get(department.getId());
+		   model.addAttribute("jdulist", jdulist);
+		   model.addAttribute("department", dept.getDepartmentName());
+		   
+		   
+			
+		   return "job/listinprogressJob";		 
 	   }
 	   
 	   

@@ -2,6 +2,7 @@ package chris.lats.com.services;
 
 import java.util.List;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.Query;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -9,6 +10,9 @@ import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import chris.lats.com.dto.MailMail;
+
 import com.chris.LocationAwareTimesheet.model.EmpAddress;
 import com.chris.LocationAwareTimesheet.model.Employee;
 import com.chris.LocationAwareTimesheet.model.EmployeeDepartment;
@@ -26,7 +30,11 @@ public class EmployeeService {
 	@Autowired
 	Md5Service md5Service;
 	
-
+	@Autowired
+	MailMail mailMail;
+	
+	@Autowired
+	EmployeeDepartmentService employeedepartmentService;
 		
 	@Transactional
 	public List<Employee> getAll() {
@@ -51,6 +59,30 @@ public class EmployeeService {
 		return  employee;
 	}
 	
+	@Transactional
+	public List<Employee> getEmployeeList(String username) {
+				
+		// Create a Hibernate query (HQL)
+
+		Query query = dlp.createQuery("FROM  Employee e where  e.employeeUsername = '"+ username +"'");
+		
+		
+		
+		return  query.list();
+	}
+	
+	
+	@Transactional
+	public List<Employee> getEmployeeEmailList(String email) {
+				
+		// Create a Hibernate query (HQL)
+
+		Query query = dlp.createQuery("FROM  Employee e where  e.employeeEmail = '"+ email +"'");
+		
+		
+		
+		return  query.list();
+	}
 	
 		
 		
@@ -74,17 +106,14 @@ public class EmployeeService {
 	 * Adds a new employee
 	 */
 	@Transactional
-	public void add(String ename, String esurname, String edob, String ephone, String egender, String username, String password,  String estart, String eaddress1, String eaddress2, Integer localityid, Integer departmentid, String email) {
+	public void add(String ename, String esurname, String edob, String ephone, String egender, String username,  
+					String estart, String eaddress1, String eaddress2, Integer localityid, Integer departmentid, String email) 
+	{
 	 
 	Employee employee = new Employee();
 	EmpAddress empAddress = new EmpAddress();
 	EmployeeDepartment empDepartment = new EmployeeDepartment(); 
-	
-
-	
-	
-	
-		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+	DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
     	
     	String dobConvert = edob;
     	DateTime dob = fmt.parseDateTime(dobConvert);
@@ -92,9 +121,10 @@ public class EmployeeService {
     	String startConvert = estart;
     	DateTime startDate = fmt.parseDateTime(startConvert);
     	
-    	String md5password = Md5Service.hashPassword(password);
+    	 String genpassword = RandomStringUtils.random(8, 0, 20, true, true, "bj81G5RDED3DC6142kasok".toCharArray());
     	
-    	    	   	
+    	String md5password = Md5Service.hashPassword(genpassword);
+    	
     	employee.setEmployeeName(ename);
     	employee.setEmployeeSurname(esurname);
     	employee.setEmployeeDob(dob);
@@ -121,6 +151,12 @@ public class EmployeeService {
 		empDepartment.setDepartment(dlp.getDepartments(departmentid));
 		
 		dlp.saveOrUpdate(empDepartment);
+		
+		mailMail.sendMail("Loation Aware Timesheet System<locationawaretimesheetsystem@gmail.com>",
+	    		   employee.getEmployeeName()+" "+employee.getEmployeeSurname()+"<"+employee.getEmployeeEmail()+">",
+	    		   "New Account Creation", 
+	    		   "Welcome "+ employee.getEmployeeName()+" "+ employee.getEmployeeSurname()+" below please find your personal system credentials"+ "\n"+ 
+	    		   "Your userneme is: "+ employee.getEmployeeUsername() +"\n"+ " and your password is "+ genpassword);
 	}
 	
 	/**
@@ -128,14 +164,17 @@ public class EmployeeService {
 	 * @param id the id of the existing employee
 	 */
 	@Transactional
-	public void delete(Integer id) {
-				
+	public void terminate(Integer id) {
+		java.util.Date date= new java.util.Date();	
 		// Retrieve existing employee
 		
 		Employee employee = dlp.getEmployee(id);
+		employee.setEmployeeEndDate((new DateTime(date.getTime())));
+		employee.setEmployeeUsername("deleted");
+		EmployeeDepartment employeedepartment = employeedepartmentService.getempldept(employee.getId());
+		employeedepartment.setEmployeeDepartmentEndDate((new DateTime(date.getTime())));
 		
-		// Delete 
-		dlp.delete(employee);
+		dlp.saveOrUpdate(employee);
 		
 	}
 	
@@ -145,7 +184,8 @@ public class EmployeeService {
 	 * Edits an existing employee
 	 */
 	@Transactional
-	public void edit(int id, String ename, String esurname, String edob, String ephone, String egender, String estart, String email) {
+	public void edit(int id, String ename, String esurname, String edob, String ephone, String egender,
+						String estart, String email) {
 		Employee employee = dlp.getEmployee(id);
 				
 			DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -169,6 +209,23 @@ public class EmployeeService {
 		// Save updates
 		dlp.saveOrUpdate(employee);
 	}
+	
+	@Transactional
+	public void changePassword(int employeeid, String password) {
+		
+		Employee employee = dlp.getEmployee(employeeid);
+				
+		String employeePassword = Md5Service.hashPassword(password);
+	    	employee.setEmployeePassword(employeePassword);
+	    			
+		// Save updates
+		dlp.saveOrUpdate(employee);
+	}
+	
+
+
+	
+	
 	
 
 }

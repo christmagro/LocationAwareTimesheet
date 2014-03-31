@@ -1,6 +1,7 @@
 package chris.lats.com.controllers;
 
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import org.joda.time.format.DateTimeFormat;
@@ -89,32 +90,53 @@ public class EmployeeController{
 		return "employee/addEmployee";
 		}
 
-	  	    	
-	   @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
-	  public String postAddEmployee(@RequestParam(value="employeeName", required=true) String empolyeeName,
-			  					 @RequestParam(value="employeeSurname", required=true) String empolyeeSurname,
-			  					 @RequestParam("employeeDob") String employeeDob, 
+	  @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
+	  public @ResponseBody JsonResponse postAddEmployee(@RequestParam(value="employeeName", required=true) String employeeName,
+			  					 @RequestParam(value="employeeSurname", required=true) String employeeSurname,
+			  					 @RequestParam(value="employeeDob", required=true) String employeeDob, 
 			  					 @RequestParam(value="employeeGender", required=true) String employeeGender, 
 			  					 @RequestParam(value="employeePhone", required=true) String employeePhone, 
 			  					 @RequestParam(value="employeeUsername", required=true) String employeeUsername, 
-			  					 @RequestParam(value="employeePassword", required=true) String employeePassword,
 			  					 @RequestParam(value="employeeEmail", required=true) String employeeEmail,
-			  					 @RequestParam("employeeStartDate") String employeeStartDate,
-			  					 @RequestParam(value="employeeaddress1") String employeeaddress1, 
-			  					 @RequestParam(value="employeeaddress2") String employeeaddress2,
-			  					 @RequestParam(value="elocality") Integer localityId,
-			  					 @RequestParam(value="edepartment") Integer departmentId)
+			  					 @RequestParam(value="employeeStartDate", required=true) String employeeStartDate,
+			  					 @RequestParam(value="employeeaddress1", required=true) String employeeaddress1, 
+			  					 @RequestParam(value="employeeaddress2", required=true) String employeeaddress2,
+			  					 @RequestParam(value="elocality", required=true) Integer localityId,
+			  					 @RequestParam(value="edepartment", required=true) Integer departmentId, Model model)
 			  					
 			  					  {
-			
 		  
-		   employeeService.add(empolyeeName, empolyeeSurname, employeeDob, employeePhone, employeeGender, employeeUsername, employeePassword, employeeStartDate, employeeaddress1,employeeaddress2, localityId, departmentId, employeeEmail);
-	 
-		   //don't forget to add username check with ajax and md5 hashing
-		
-		
-		   return "redirect:listEmployees";
 		  
+			JsonResponse res = new JsonResponse();
+			List<Employee> employeeUsernameList = employeeService.getEmployeeList(employeeUsername);
+			List<Employee> employeEmailList = employeeService.getEmployeeEmailList(employeeEmail);
+  			
+
+  			if(employeeUsernameList.size() > 0){
+  			res.setStatus("FAIL");
+  			res.setResult("Entered Username already in use");	
+  			System.out.println("Fail");
+  			}
+  			
+  			else if(employeEmailList.size() > 0){
+				  res.setStatus("FAIL");
+				  res.setResult("Entered Email address is alrady in use");	
+			  }
+
+
+			else{
+			res.setStatus("SUCCESS");
+			res.setResult("All ok");
+			employeeService.add(employeeName, employeeSurname, employeeDob, employeePhone, employeeGender, 
+					   employeeUsername, employeeStartDate, employeeaddress1,employeeaddress2, 
+					   localityId, departmentId, employeeEmail);
+		}
+
+
+
+  			return res;
+		  
+	  
 	}
 	   
 	   
@@ -147,54 +169,45 @@ public class EmployeeController{
 	  	return "employee/listEmployee";
 	   }
 	   
+	   
+	   
+	   
+	   
+	   
 	   @RequestMapping(value = "/editEmployee", method = RequestMethod.GET)
 		public String getEditEmployee(@RequestParam(value="id", required=true) int id, Model model) {
-			
+				  
+		   	Employee employee =  employeeService.get(id);
+		    //getting existent Employee and mapping in the view
 		  
-		  
-		   Employee employee =  employeeService.get(id);
-		    //Creating new Employee and mapping in the view
-		  
-		 
-		  
-		   
-		   DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+		   	DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
 	    	String dobString = fmt.print(employee.getEmployeeDob());
 	     	String startString = fmt.print(employee.getEmployeeStartDate());
 	    	
 	    	model.addAttribute("dob", dobString);
 	    	model.addAttribute("start", startString);
-		   
-		   
-			model.addAttribute("editEmployee", employee);
+	    	model.addAttribute("editEmployee", employee);
 			
 			//Getting Locality list to generate dropdownlist in the view
-			List<Employee> employeelist = employeeService.getAll();
 			List<Departments> departmentlist = departmentService.getAll();
-			model.addAttribute("employeelist", employeelist);
 			model.addAttribute("departmentlist", departmentlist);
 			return "employee/editEmployee";
 			}
 
-		  	    	
-		   @RequestMapping(value = "/editEmployee", method = RequestMethod.POST)
+	   @RequestMapping(value = "/editEmployee", method = RequestMethod.POST)
 		  public String postEditEmployee(@RequestParam(value="id", required=true) int empolyeeId,
 				  					 @RequestParam(value="employeeName", required=true) String empolyeeName,
 				  					 @RequestParam(value="employeeSurname", required=true) String empolyeeSurname,
 				  					 @RequestParam("employeeDob") String employeeDob, 
 				  					 @RequestParam(value="employeeGender", required=true) String employeeGender, 
 				  					 @RequestParam(value="employeePhone", required=true) String employeePhone,
-				  					@RequestParam(value="employeeEmail", required=true) String employeeEmail, 
+				  					 @RequestParam(value="employeeEmail", required=true) String employeeEmail, 
 				  					 @RequestParam("employeeStartDate") String employeeStartDate)
-				  					
 				  					  {
 				
-			  
-			   employeeService.edit(empolyeeId,empolyeeName, empolyeeSurname, employeeDob, employeePhone, employeeGender, employeeStartDate, employeeEmail);
-		 
-		
-			
-			
+			   employeeService.edit(empolyeeId,empolyeeName, empolyeeSurname, employeeDob, employeePhone, employeeGender, 
+					   				employeeStartDate, employeeEmail);
+
 			   return "redirect:listEmployees";
 		}
 		   
@@ -583,7 +596,17 @@ public class EmployeeController{
 							   JsonResponse res = new JsonResponse();
 								 int empresult = employeedeviceService.checkEmployee(employeeid);
 								 int imeiresult = employeedeviceService.checkIMEI(imei);
-								  if(imeiresult > 0){
+								 
+								 if(imei.isEmpty()){
+										res.setStatus("FAIL");
+										res.setResult("Please enter IMEI no.");						 
+									  }
+								 
+								 else if(model.isEmpty()){
+										res.setStatus("FAIL");
+										res.setResult("Please enter phone Model");						 
+									  }
+								 else if(imeiresult > 0){
 									res.setStatus("FAIL");
 									res.setResult("Mobile already active under another user");						 
 								  }
@@ -634,7 +657,18 @@ public class EmployeeController{
 								   
 									
 									 int imeiresult = employeedeviceService.checkIMEI(imei);
-									  if(imeiresult > 0){
+									 
+									 if(imei.isEmpty()){
+											res.setStatus("FAIL");
+											res.setResult("Please enter IMEI no.");						 
+										  }
+									 
+									 else if(model.isEmpty()){
+											res.setStatus("FAIL");
+											res.setResult("Please enter phone Model");						 
+										  }
+									 
+									 else if(imeiresult > 0){
 										res.setStatus("FAIL");
 										res.setResult("Mobile already active under another user");						 
 									  }
@@ -847,6 +881,26 @@ public class EmployeeController{
 										
 											return "redirect:listEmployeePermissions?employeeid="+ empid;
 											}
+									   
+									   
+									   @RequestMapping(value = "/terminateEmployee", method = RequestMethod.GET)
+										public String terminateEmployee(Model model, 
+																			  @RequestParam(value="employeeid", required=true) int employeeid) {
+											
+										   employeeService.terminate(employeeid);
+										
+											return "redirect:listEmployees";
+											}
+									   
+									   
+									   
+									   
+									   
+									   
+									   
+									   
+										   
+									   
 									  
 		}
 			

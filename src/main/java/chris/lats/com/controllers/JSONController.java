@@ -79,17 +79,12 @@ public class JSONController {
 	   	for(JobUpdateAllocationDTO jua:juas){
 	   		JobList jl = new JobList();
 	   		
-	   		
 	   		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
-	    	
-	   		
-	   		Job job = jobService.getJob(jua.getJobId());
+	    	Job job = jobService.getJob(jua.getJobId());
 	   		JobUpdate jobUpdate= jobService.getJobUpdate(jua.getJobupdateId());
-	   		
 	   		JobStatus jobUpdateStatus = jobUpdate.getJobStatus();
 	   		JobStatus jobStatus = jobService.getJobStatus(jobUpdateStatus.getId());
-	   		
-	   				
+	   		   				
 	   		
 	   		jl.setJobDescription(job.getJobDescription());
 	   		jl.setJobRemarks(job.getJobRemarks());
@@ -106,15 +101,8 @@ public class JSONController {
 	   		jl.setJobid(job.getId());
 	   		jl.setJobStatus(jobStatus.getJobStatusName());
 	   		joblist.add(jl);
-	   		
-	   		
-	   		
 	   	}
-
-
 	return joblist;
-	
-	 
 	  	 
    }
 	
@@ -168,15 +156,15 @@ public class JSONController {
 		 cj.setPolylines(polylines);
 			 
 		 
-
-		 
 			return polylines;
 
 	 }
 	 
 	 
+	 
+	 
 		@RequestMapping(value = "/mapcoordinates", method = RequestMethod.GET)
-		public String getAddClient(@RequestParam(value="jobid", required=true) int jobid, Model model) {
+		public String getCoordinates(@RequestParam(value="jobid", required=true) int jobid, Model model) {
 			JobAllocation joballocation = jobService.getAllocationByJobid(jobid);
 			
 			List<JobCoordinates> jobcoordinates = jobService.getCoordinates(joballocation.getId());
@@ -188,8 +176,7 @@ public class JSONController {
 			
 			return "job/jobmap";
 			}
-		
-		long diff = 0;
+	
 		@RequestMapping(method = RequestMethod.GET , value = "/TimeSheet")
 	    public ModelAndView handleSimpleReportMulticourierOut(@RequestParam(value="jobid", required=true) int jobid,HttpServletRequest request, 
 				HttpServletResponse response) throws Exception {

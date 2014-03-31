@@ -48,7 +48,11 @@
 </form:form>
 	</table>
 
+ <script type="text/javascript">
+ var frmvalidator  = new Validator("editEmployeeDepartment");
+ frmvalidator.addValidation("departmentList","req","Please select new department");
 
+ </script> 
   </div>
 </section>
 

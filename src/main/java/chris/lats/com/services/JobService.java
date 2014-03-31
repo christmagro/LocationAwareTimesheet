@@ -33,7 +33,7 @@ public class JobService {
 	
 	@Autowired
 	DataLayerLatsdbImpl dlp;
-	java.util.Date date= new java.util.Date();
+
 	
 	
 	@Transactional
@@ -77,7 +77,7 @@ public class JobService {
 	
 	@Transactional
 	public void addJob(String jobAppointment, int clientdetailsid, String jobDescription, String jobRemarks,int departmentid, int employeeid ){
-		
+		java.util.Date date= new java.util.Date();
 		Job job = new Job();
 	DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
     	
@@ -106,6 +106,44 @@ public class JobService {
 		
 	}
 	
+	
+	@Transactional
+	public void editJob(int jobid, String jobAppointment,  String jobDescription, String jobRemarks,int departmentid){
+		java.util.Date date= new java.util.Date();
+		Job editjob = dlp.getJob(jobid);
+	DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
+    	
+    	String appointmentConvert = jobAppointment;
+    	DateTime appointmentdate = fmt.parseDateTime(appointmentConvert);
+		
+		editjob.setJobAppointmentDatetime(appointmentdate);
+		editjob.setJobCreationTimestamp((new DateTime(date.getTime())));
+		editjob.setJobDescription(jobDescription);
+		editjob.setJobRemarks(jobRemarks);
+		dlp.saveOrUpdate(editjob);
+		
+		
+		Query query = dlp.createQuery("From DepartmentJob dj where dj.job = '"+jobid+"'");
+		DepartmentJob editdepartmentjob =  (DepartmentJob) query.list().get(0);
+		editdepartmentjob.setDepartment(dlp.getDepartments(departmentid));
+		dlp.saveOrUpdate(editdepartmentjob);
+		
+	
+		
+		
+	}
+	
+	
+	@Transactional
+	public DepartmentJob getDepartmentJobbyJobid(int jobid){
+		
+		Query query = dlp.createQuery("From DepartmentJob dj where dj.job = '"+jobid+"'");
+		DepartmentJob departmentjob =  (DepartmentJob) query.list().get(0);
+		
+		return departmentjob;
+	}
+	
+	
 	@Transactional
 		public List<JobDepartmentUpdateDTO> getNewJobsDepartment(int deptid){
 			Query query = dlp.createSQLQuery("SELECT jb.job_id as jobId, dj.department_job_id as departmentjobId, ju.job_update_id as jobupdateId " 
@@ -121,6 +159,24 @@ public class JobService {
 			return query.list();
 			
 		}
+	
+	
+	@Transactional
+	public List<JobDepartmentUpdateDTO> getinprogressJobsDepartment(int deptid){
+		Query query = dlp.createSQLQuery("SELECT jb.job_id as jobId, dj.department_job_id as departmentjobId, ju.job_update_id as jobupdateId " 
+										+"FROM job AS jb "
+										+"Join Department_Job AS dj "
+										+"ON jb.job_id = dj.job_id "
+										+"Join job_update as ju "
+										+"ON jb.job_id = ju.job_id "
+										+"where dj.department_id = '"+deptid+"' AND ju.job_status_id = 8 AND ju.job_update_end is null")
+		
+		.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
+		
+		return query.list();
+		
+	}
+	
 	
 	@Transactional
 	public List<JobDepartmentUpdateDTO> getallJobsDepartment(int deptid){
@@ -156,6 +212,22 @@ public class JobService {
 	}
 	
 	
+	@Transactional
+	public List<JobDepartmentUpdateDTO> getemployeeclosedJobs(int employeeid){
+		Query query = dlp.createSQLQuery("SELECT jb.job_id as jobId, dj.department_job_id as departmentjobId, ju.job_update_id as jobupdateId " 
+										+"FROM job AS jb "
+										+"Join Department_Job AS dj "
+										+"ON jb.job_id = dj.job_id "
+										+"Join job_update as ju "
+										+"ON jb.job_id = ju.job_id "
+										+"where ju.employee_id = '"+employeeid+"' and ju.job_status_id = 6 and ju.job_update_end is null")
+
+										.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
+		
+		return query.list();
+		
+	}
+	
 	
 	@Transactional
 	public List<JobDepartmentUpdateDTO> getNewJobs(){
@@ -172,6 +244,24 @@ public class JobService {
 		return query.list();
 		
 	}
+	
+	
+	@Transactional
+	public List<JobDepartmentUpdateDTO> getinprogressJobs(){
+		Query query = dlp.createSQLQuery("SELECT jb.job_id as jobId, dj.department_job_id as departmentjobId, ju.job_update_id as jobupdateId " 
+										+"FROM job AS jb "
+										+"Join Department_Job AS dj "
+										+"ON jb.job_id = dj.job_id "
+										+"Join job_update as ju "
+										+"ON jb.job_id = ju.job_id "
+										+"where ju.job_status_id = 8 and ju.job_update_end is null")
+		
+		.setResultTransformer(Transformers.aliasToBean(JobDepartmentUpdateDTO.class));
+		
+		return query.list();
+		
+	}
+	
 
 	@Transactional
 	public List<JobDepartmentUpdateDTO> getallJobs(){
@@ -210,7 +300,7 @@ public class JobService {
 	
 	@Transactional
 	public void allocateJob(int jobupdateid, Integer jobid, Integer creatoremployeeid, int employeeid ){
-		
+		java.util.Date date= new java.util.Date();
     	
 	    JobUpdate oldjobupdate = dlp.getJobUpdate(jobupdateid);
 	    oldjobupdate.setJobUpdateEnd((new DateTime(date.getTime())));
@@ -248,7 +338,7 @@ public class JobService {
 										+" on ju.job_id = ja.job_id"
 										+" join job_status js"
 										+" on ju.job_status_id = js.job_status_id"
-										+" where ed.employee_device_imei = '"+imei+"' and ed.employee_device_end_date is null and ju.job_update_end is null and (ju.job_status_id =  4 or ju.job_status_id =  5)")
+										+" where ed.employee_device_imei = '"+imei+"' and ed.employee_device_end_date is null and ju.job_update_end is null and (ju.job_status_id =  4 or ju.job_status_id =  5 or ju.job_status_id =  8)")
 	
 										.setResultTransformer(Transformers.aliasToBean(JobUpdateAllocationDTO.class));
 		
@@ -402,5 +492,9 @@ public class JobService {
 		
 	
 	}
+	
+	
+	
+	
 
 }

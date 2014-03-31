@@ -22,11 +22,11 @@
 		
 		<tr>
 			<td><form:label path="empAddress1">Address 1:</form:label></td>
-			<td><form:input path="empAddress1"  id="empAddress1" name="empAddress1"/></td>
+			<td><form:input path="empAddress1" maxlength="40" id="empAddress1" name="empAddress1"/></td>
 		</tr>
 				<tr>
 			<td><form:label path="empAddress2">Address 2:</form:label></td>
-			<td><form:input path="empAddress2"  id="empAddress2" name="empAddress2"/></td>
+			<td><form:input path="empAddress2" maxlength="40" id="empAddress2" name="empAddress2"/></td>
 		</tr>
 	
 		
@@ -52,7 +52,12 @@
 	
 	
 </form:form>
-
+ <script type="text/javascript">
+ var frmvalidator  = new Validator("addEmpAddress");
+ frmvalidator.addValidation("empAddress1","req","Please insert address1");
+ frmvalidator.addValidation("empAddress2","req","Please insert address2");
+ frmvalidator.addValidation("elocality","req","Please select locality");
+ </script> 
   </div>
 </section>
 

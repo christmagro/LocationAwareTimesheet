@@ -14,12 +14,16 @@
 <section>
     <div class="container" align="center">
  <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
+ 
+
  <h2>Create a new employee</h2>
 
 
 <c:url var="saveUrl" value="/employee/addEmployee" /> 
 <form:form id="addEmployee" modelAttribute="addEmployee"  method="POST" action="${saveUrl}">
-	<table>
+
+
+	<table class="smalltable">
 	
 		<tr>
 		<td colspan="2" align="center">Employee Details</td>
@@ -27,11 +31,11 @@
 	
 		<tr>
 			<td><form:label path="employeeName">Employee Name</form:label></td>
-			<td><form:input path="employeeName"  id="employeeName" name="employeeName"/></td>
+			<td><form:input path="employeeName" maxlength="40" id="employeeName" name="employeeName"/></td>
 		</tr>
 				<tr>
 			<td><form:label path="employeeSurname">Employee Surname</form:label></td>
-			<td><form:input path="employeeSurname"  id="employeeSurname" name="employeeSurname"/></td>
+			<td><form:input path="employeeSurname" maxlength="40"  id="employeeSurname" name="employeeSurname"/></td>
 		</tr>
 	
 		<tr>
@@ -52,7 +56,7 @@
 	
 		<tr>
 			<td><form:label path="employeePhone">Employee Phone</form:label></td>
-			<td><form:input path="employeePhone"  id="employeePhone" name="employeePhone"/></td>
+			<td><form:input path="employeePhone" maxlength="40"  id="employeePhone" name="employeePhone"/></td>
 		</tr>
 		
 			
@@ -67,11 +71,11 @@
 		
 			<tr>
 			<td><form:label path="">Address 1</form:label></td>
-			<td><input id="employeeaddress12" name="employeeaddress1"/></td>
+			<td><input maxlength="40"  id="employeeaddress1" name="employeeaddress1"/></td>
 		</tr>
 			<tr>
 			<td><form:label path="">Address 2</form:label></td>
-			<td><input id="employeeaddress22" name="employeeaddress2"/></td>
+			<td><input maxlength="40"  id="employeeaddress2" name="employeeaddress2"/></td>
 		</tr>
 		
 		<tr>
@@ -103,24 +107,23 @@
 		
 		<tr>
 			<td><form:label path="employeeUsername">Employee Username</form:label></td>
-			<td><form:input path="employeeUsername"  id="employeeUsername" name="employeeUsername"/></td>
+			<td><form:input path="employeeUsername" maxlength="40"  id="employeeUsername" name="employeeUsername"/></td>
+		
 		</tr> 
-		<tr>
-			<td><form:label path="employeePassword">Employee Password</form:label></td>
-			<td><form:input path="employeePassword" type="password" id="employeePassword" name="employeePassword"/></td>
-		</tr>  
+	 
 		
 		<tr>
 			<td><form:label path="employeeEmail">Employee E-Mail</form:label></td>
-			<td><form:input path="employeeEmail"  id="employeePassword" name="employeeEmail"/></td>
+			<td><form:input path="employeeEmail" type="email" maxlength="40"  id="employeeEmail" name="employeeEmail"/></td>
 		</tr> 
 		
-		
+		<tr><td><input id="button" type="button" value="Submit" onclick="doAddEmployee()"></td></tr>
 	
 		
 	</table>
+	 <div style={color:red;} id="error" class="error"></div>
+<div style={color:green;} id="info" class="success"></div>
 	
-	<input type="submit" value="Save" />
 </form:form>
 
 <script type="text/javascript">
@@ -128,7 +131,8 @@
 		$('*[name=employeeDob]').appendDtpicker({
 			"dateFormat": "DD/MM/YYYY",
 			"dateOnly": true,
-			"closeOnSelected":true
+			"closeOnSelected":true,
+			"todayButton": false
 		});
 			
 	});
@@ -138,12 +142,26 @@
 		$('*[name=employeeStartDate]').appendDtpicker({
 			"dateFormat": "DD/MM/YYYY",
 			"dateOnly": true,
-			"closeOnSelected":true
+			"closeOnSelected":true,
+			"todayButton": false
 		});
 		});
 	</script>
 
+ <script type="text/javascript">
+ var frmvalidator  = new Validator("addEmployee");
+ frmvalidator.addValidation("employeeName","req","Please enter name");
+ frmvalidator.addValidation("employeeSurname","req","Please enter surname");
+ frmvalidator.addValidation("employeeDob","req","Please insert date of birth");
+ frmvalidator.addValidation("employeeGender","req","Please select gender");
+ frmvalidator.addValidation("employeePhone","req","Please enter phone number");
+ frmvalidator.addValidation("employeeStartDate","req","Please insert date start date");
+ frmvalidator.addValidation("employeeaddress1","req","Please insert address1");
+ frmvalidator.addValidation("employeeaddress2","req","Please insert address2");
+ frmvalidator.addValidation("elocality","req","Please select locality");
+ frmvalidator.addValidation("edepartment","req","Please select department");
 
+ </script> 
 
 
  </div>

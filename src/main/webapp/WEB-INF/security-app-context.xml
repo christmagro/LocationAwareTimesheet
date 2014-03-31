@@ -32,11 +32,64 @@
     
      <intercept-url pattern="/" access="permitAll" />
    
-   
 
-    <intercept-url pattern="/job/*" access="hasRole('Admin')" />
-    <intercept-url pattern="/employee/**" access="permitAll" />
-    <intercept-url pattern="/client/**" access="permitAll" />
+     <intercept-url pattern="/client/" access="hasRole('Admin')"/>
+     <intercept-url pattern="/client/editClient" access="hasRole('Admin')"/>
+     <intercept-url pattern="/client/onHoldClient" access="hasRole('Admin')"/>
+     <intercept-url pattern="/client/activateClient" access="hasRole('Admin')"/>
+     <intercept-url pattern="/client/addClient" access="hasRole('Admin')"/>
+     <intercept-url pattern="/client/editClientDetails" access="hasRole('Admin')"/>
+     <intercept-url pattern="/client/removeClientDetails" access="hasRole('Admin')"/>
+     <intercept-url pattern="/client/addClientDetails" access="hasRole('Admin')"/>
+     <intercept-url pattern="/client/listClientDetails" access="hasRole('Manager')"/>
+     <intercept-url pattern="/client/listClients" access="hasRole('Manager')"/>
+     
+   
+     
+     
+     <intercept-url pattern="/employee/" access="hasRole('Admin')" />
+     <intercept-url pattern="/employee/addEmployee" access="hasRole('Admin')" />
+     <intercept-url pattern="/employee/addEmployeeManager" access="hasRole('Admin')" />
+     <intercept-url pattern="/employee/addEmployeeDevice" access="hasRole('Admin')" />
+     <intercept-url pattern="/employee/listPermissions" access="hasRole('Admin')" />
+     <intercept-url pattern="/employee/addPermission" access="hasRole('Admin')" />
+     <intercept-url pattern="/employee/editEmployee" access="hasRole('Admin')" />
+  	 <intercept-url pattern="/employee/editEmployeeDepartment" access="hasRole('Admin')" />
+     <intercept-url pattern="/employee/listEmployeePermissions" access="hasRole('Admin')" />	
+     <intercept-url pattern="/employee/terminateEmployee" access="hasRole('Admin')" />	
+     <intercept-url pattern="/employee/addEmployeePermission" access="hasRole('Admin')" />	
+     <intercept-url pattern="/employee/listEmpAddresses" access="hasRole('Manager')" />
+     <intercept-url pattern="/employee/listEmployees" access="hasRole('Manager')" />
+     <intercept-url pattern="/employee/listEmployeeDevices" access="hasRole('Manager')" />
+     <intercept-url pattern="/employee/listEmployeeManager" access="hasRole('Manager')" />
+     <intercept-url pattern="/employee/editEmployeeManager" access="hasRole('Manager')" />
+     <intercept-url pattern="/employee/removeEmployeeManager" access="hasRole('Manager')" />
+     <intercept-url pattern="/employee/changeEmployeeDevice" access="hasRole('Manager')" />
+     <intercept-url pattern="/employee/removeEmployeeDevice" access="hasRole('Manager')" />
+     <intercept-url pattern="/employee/editPermission" access="hasRole('Manager')" />
+     <intercept-url pattern="/employee/enablePermission" access="hasRole('Manager')" />
+     <intercept-url pattern="/employee/disablePermission" access="hasRole('Manager')" />
+    
+
+
+    <intercept-url pattern="/job/" access="hasRole('Admin')" />
+    <intercept-url pattern="/job/createJob" access="hasRole('Admin')" />
+    <intercept-url pattern="/job/listJobsNew" access="hasRole('Admin')" />
+    <intercept-url pattern="/job/listJobsInprogress" access="hasRole('Admin')" />
+    <intercept-url pattern="/job/listJobs" access="hasRole('Admin')" />
+    <intercept-url pattern="/job/listJobsClosed" access="hasRole('Admin')" />
+    <intercept-url pattern="/job/editJob" access="hasRole('Admin')" />
+    <intercept-url pattern="/job/allocateJob" access="hasRole('Manager')" />
+    <intercept-url pattern="/job/" access="hasRole('Admin')" />
+    <intercept-url pattern="/job/" access="hasRole('Admin')" />
+    <intercept-url pattern="/job/listJobDepartmentUpdate" access="hasRole('Manager')" />
+    <intercept-url pattern="/job/listJobsDepartmentInprogress" access="hasRole('Manager')" />
+    <intercept-url pattern="/job/listJobsDepartment" access="hasRole('Manager')" />
+    <intercept-url pattern="/job/listJobsEmployeeClosed" access="hasRole('Employee')" />
+    <intercept-url pattern="/job/listJobsDepartmentClosed" access="hasRole('Manager')" />
+        
+    
+    
     <intercept-url pattern="/resources/**" access="permitAll" />
     <intercept-url pattern="/json/**" access="permitAll" />
     <intercept-url pattern="/js/**" access="permitAll" />
@@ -51,10 +104,13 @@
   
 
     <access-denied-handler error-page="/security/denied" />
-     <form-login login-page="/security/login" default-target-url="/employee/listEmployees" authentication-failure-url="/security/loginfailed" />
+     <form-login login-page="/security/login" default-target-url="/security/home" authentication-failure-url="/security/loginfailed" />
       <logout logout-success-url="/security/logout" />
     
         
+         
+      
+      
   
 </http>
 

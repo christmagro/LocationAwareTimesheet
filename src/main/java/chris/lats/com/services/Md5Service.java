@@ -16,11 +16,10 @@ public class Md5Service {
 		BigInteger hash = new BigInteger(1, md5.digest());
 		hashword = hash.toString(16);
 		} catch (NoSuchAlgorithmException nsae) {
-		// ignore
+	
 		}
-		
-		
+				
 		return hashword;
-		}
+	}
 
 }

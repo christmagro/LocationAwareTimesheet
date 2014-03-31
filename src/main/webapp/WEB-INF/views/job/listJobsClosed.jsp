@@ -30,7 +30,8 @@
 		<th align = "center" class="center">Job Remarks</th>
 		<th align = "center" class="center">Appointment Date</th>
 		<th align = "center" class="center">Department</th>
-		<th align = "center" class="center">Job Status</th>
+		<th align = "center" class="center">Map</th>
+		<th align = "center" class="center">Print Timesheet</th>
 		
 	
 	
@@ -38,7 +39,8 @@
 		</thead>
 		<tbody>
 	<c:forEach items="${jdulist}" var="jdulist">
-		
+		<c:url var="viewMap" value="/json/mapcoordinates?jobid=${jdulist.job.id}" />
+		<c:url var="printTimeSheet" value="/json/TimeSheet?jobid=${jdulist.job.id}" />
 		
 		<tr>
 			
@@ -51,8 +53,8 @@
 			<td align = "center" class="center"><c:out value="${jdulist.job.jobRemarks}" /></td>
 			<td align = "center" class="center"><joda:format value="${jdulist.job.jobAppointmentDatetime}" pattern="dd/MM/yyyy HH:mm"/></td>
 			<td align = "center" class="center"><c:out value="${jdulist.department.departmentName}" /></td>
-			<td align = "center" class="center"><c:out value="${jdulist.jobstatus.jobStatusName}" /></td>
-			
+			<td align = "center" class="center"><a href="${viewMap}"><img src="../resources/images/map.ico" alt="View on Map" width="25px" height="25px" ></a></td>
+			<td align = "center" class="center"><a href="${printTimeSheet}"><img src="../resources/images/printer.png" alt="Print Timesheet" width="25px" height="25px" ></a></td>
 			
 			
 			
@@ -69,14 +71,14 @@
 	
 	sort_config: { 
 		async_sort:true, 
-		sort_types:['Number', 'String', 'String', 'String', 'String','dmy','String', 'String','none']
+		sort_types:['Number', 'String', 'String', 'String', 'String','dmy','String', 'none','none','none']
 	},
 	paging: true,  
     paging_length: 100,
     col_7:"Select",
-    col_8:"Select",
+    col_8:"none",
     col_9:"none",
-   	col_width: ["20px","50px","50px","30px","70px","70px","40px","30px","30px","30px"],
+   	col_width: ["20px","50px","50px","30px","70px","70px","40px","30px","30px","30px","30px","30px"],
 	results_per_page: ['# rows per page',[10,100]], 
     rows_counter: true,  
     rows_counter_text: "Rows:",  

@@ -34,6 +34,7 @@
 		<script type="text/javascript" src="../resources/js/jquery.js"></script>
 		<script type="text/javascript" src="../resources/js/ajaxfunctions.js"></script>
 		<script type="text/javascript" src="../resources/js/jquery.simple-dtpicker.js"></script>
+		<script type="text/javascript" src="../resources/js/gen_validatorv4.js"></script>
 
 	
 	
@@ -92,9 +93,10 @@
                             
                         </ul>
                     </li>
-                        
+                     <li><a href="../job/listJobsEmployeeClosed">My Jobs</a></li>  
                     <li><a href="../security/chgPassword">Change Password</a></li>
-                    <li><a href="../security/logout">Log Out</a></li>
+                    <li><a href="../j_spring_security_logout">Log Out</a></li>
+                   
                     </ul>
             </div>
         </div>

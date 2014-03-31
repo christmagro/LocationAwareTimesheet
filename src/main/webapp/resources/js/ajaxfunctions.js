@@ -27,7 +27,7 @@ function doAddEmployeeManager() {
 	      }	      
 	    },  
 	    error: function(e){  
-	      alert('Error: ' + e);  
+	    	alert('Please fill in all fields');   
 	    }  
 	  });  
 	}  
@@ -58,7 +58,7 @@ $.ajax({
     }	      
   },  
   error: function(e){  
-    alert('Error: ' + e);  
+	  alert('Please fill in all fields');   
   }  
 });  
 }
@@ -75,9 +75,12 @@ $.ajax({
   data : { "employeeid":$("#employeeid").val(), "imei":$("#imei").val(), "model":$("#model").val()},
   success: function(response){
     // we have the response 
+	  
+	
 	 
     if(response.status == "SUCCESS"){
-  	
+    	
+    
     	 $('#info').html("Record updated succesfull");
     	 $('#button').hide();
    	     setTimeout(function(){ window.location.href = "listEmployeeDevices";}, delay); 
@@ -89,7 +92,7 @@ $.ajax({
     }	      
   },  
   error: function(e){  
-    alert('Error: ' + e);  
+	  alert('Please fill in all fields');  
   }  
 });  
 } 
@@ -120,7 +123,7 @@ $.ajax({
     }	      
   },  
   error: function(e){  
-    alert('Error: ' + e);  
+	  alert('Please fill in all fields'); 
   }  
 });  
 } 
@@ -150,8 +153,44 @@ $.ajax({
     }	      
   },  
   error: function(e){  
-    alert('Error: ' + e);  
+	  alert('Please fill in all fields');  
   }  
 });  
-} 
+}
+
+function doAddEmployee() {  
+	
+	var delay = 1000; //Your delay in milliseconds
+	$('#button').hide();
+	$('#info').html("Validating form please wait")
+	  $.ajax({  
+	    type: "POST", 
+	    url: "addEmployee",
+	    data : { "employeeName":$("#employeeName").val(), "employeeSurname":$("#employeeSurname").val(),"employeeDob":$("#employeeDob").val(),"employeeGender":$("#employeeGender").val(),
+	    	"employeePhone":$("#employeePhone").val(),"employeeStartDate":$("#employeeStartDate").val(),"employeeaddress1":$("#employeeaddress1").val(),"employeeaddress2":$("#employeeaddress2").val(),
+	    	"elocality":$("#elocality").val(),"edepartment":$("#edepartment").val(),"employeeUsername":$("#employeeUsername").val(),"employeeEmail":$("#employeeEmail").val()}, 
+	       success: function(response){
+	      // we have the response 
+	    	   
+	      if(response.status == "SUCCESS"){
+	    	  $('#info').html("Employee added succesfull");
+	    	  $('#button').hide();
+	    	  setTimeout(function(){ window.location.href = "listEmployees";}, delay); 
+	    	 // window.location.href = "listEmployeeManager";
+	    }else{
+	    	 $('#button').show();
+	    	  $('#error').html("Please correct following errors: " + response.result);
+	    	  $('#info').html("Validating form please wait")
+	    	  $('#error').show('slow');
+	    	  $('#button').show();
+	    	  
+	      }	      
+	    },  
+	    error: function(e){  
+	      alert('Please fill in all fields');  
+	    
+	    }  
+	  });  
+}  
+
 
